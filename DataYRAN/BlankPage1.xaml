@@ -1,0 +1,118 @@
+﻿<Page
+    x:Class="DataYRAN.BlankPage1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DataYRAN"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <ListView Header="Недавние проекты и шаблоны" x:Name="ListP" Margin="60,24,24,24" Width="300" FontSize="20" >
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:ClassPList">
+                    <Grid UseLayoutRounding="True"  Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{x:Bind storageFolder.DisplayName, Mode=OneWay}" FontSize="16"></TextBlock>
+                        <TextBlock Grid.Row="1" Text="{x:Bind storageFolder.Path, Mode=OneWay}" FontSize="10"></TextBlock>
+                       
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <GridView Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" SelectionChanged="GridView_SelectionChanged">
+            <GridViewItem Width="280"  Margin="8" Height="200">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Source="Assets\top.jpg" Width="100"/>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Text="Новый проект" FontSize="16"/>
+                        <TextBlock Text="Создает новый пустой проект таблиц" TextWrapping="Wrap" FontSize="16"/>
+                    </StackPanel>
+                </Grid>
+            </GridViewItem>
+            <GridViewItem Width="280" Tag="Bin" Margin="8">
+                <Grid>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Source="Assets\StoreLogo.scale-400.png" Width="100"/>
+                   
+                    <StackPanel Grid.Column="1" Grid.Row="1">
+                        <TextBlock Text="Работа с файлами данных уран" FontSize="16"/>
+                        <TextBlock Text="Загружает фыбранные бинарные файлы и обрабатывает их по заданной логике" TextWrapping="WrapWholeWords" FontSize="16"/>
+                    </StackPanel>
+                </Grid>
+            </GridViewItem>
+            <GridViewItem Width="280" Tag="BD" Margin="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Source="Assets\database.png" Width="100"/>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Text="Данные из БД" FontSize="16"/>
+                        <TextBlock Text="Загружает таблицы из БД с возможностью применения условий" TextWrapping="Wrap" FontSize="16"/>
+                    </StackPanel>
+                </Grid>
+            </GridViewItem>
+            <GridViewItem Width="280" Margin="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Source="Assets\top.jpg" Width="100"/>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Text="Данные из текстовых таблиц" FontSize="16"/>
+                        <TextBlock Text="Загружает таблицы из текстовых файлов с возможностью применения условий" TextWrapping="Wrap" FontSize="16"/>
+                    </StackPanel>
+                </Grid>
+            </GridViewItem>
+            <GridViewItem Width="280" Margin="8" IsEnabled="False">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Source="Assets\top.jpg" Width="100"/>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Text="Паспорт установки" FontSize="16"/>
+                        <TextBlock Text="Находиться в разработки. Просто укажите диапозон дат и параметры для получения паспорта установки" TextWrapping="Wrap" FontSize="16"/>
+                    </StackPanel>
+                </Grid>
+            </GridViewItem>
+            <GridViewItem Width="280" Margin="8" IsEnabled="False">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Source="Assets\top.jpg" Width="100"/>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Text="Проверка синхронизации" FontSize="16"/>
+                        <TextBlock Text="Находиться в разработки. Просто укажите диапозон дат и параметры для получения информации о синхронизации кластеров" TextWrapping="Wrap" FontSize="16"/>
+                    </StackPanel>
+                </Grid>
+            </GridViewItem>
+
+        </GridView>
+    </Grid>
+</Page>

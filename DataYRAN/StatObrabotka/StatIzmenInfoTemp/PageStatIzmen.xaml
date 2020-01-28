@@ -1,0 +1,101 @@
+﻿<Page
+    x:Class="DataYRAN.StatObrabotka.StatIzmenInfoTemp.PageStatIzmen"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DataYRAN.StatObrabotka.StatIzmenInfoTemp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions >
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <CommandBar Margin="0,8,0,0">
+            <AppBarButton Icon="Save" Label="Сохранить" Click="AppBarButton_Click" />
+
+            <CommandBar.Content>
+                <Button VerticalAlignment="Top" HorizontalAlignment="Left"  Style="{StaticResource NavigationBackButtonNormalStyle}" />
+            </CommandBar.Content>
+        </CommandBar>
+        <Pivot  Grid.Row="2" Title="Темп счета">
+
+            <PivotItem Header="События">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <CommandBar Background="White">
+                        <AppBarButton Icon="Refresh" Label="Обновить" />
+                        <AppBarButton Icon="Filter" Label="фильтр" >
+                            <AppBarButton.Flyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem x:Name="TempL" Text="Temp &lt; 10" />
+                                    <MenuFlyoutItem x:Name="TempH" Text="Temp &gt; 50" />
+                                    <MenuFlyoutSeparator />
+                                    <MenuFlyoutItem x:Name="clearFilter" Text="Remove Filter" />
+                                </MenuFlyout>
+                            </AppBarButton.Flyout>
+                        </AppBarButton>
+                        <AppBarButton Icon="Save" Label="сохранить" />
+                    </CommandBar>
+                    <controls:DataGrid x:Name="EmployeeGrid" Grid.Row="1" 
+                  
+                  AutoGenerateColumns="False" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollMode="Auto">
+                        <controls:DataGrid.Columns>
+                            <controls:DataGridTextColumn Header="Date" Binding="{Binding dateTime}"/>
+                            <controls:DataGridTextColumn Header="Temp" Binding="{Binding colSob}"/>
+                            <controls:DataGridTextColumn Header="D1" Binding="{Binding mTemp[0]}"/>
+                            <controls:DataGridTextColumn Header="D1%" Binding="{Binding TempPro1}"/>
+                            <controls:DataGridTextColumn Header="D2" Binding="{Binding mTemp[1]}"/>
+                            <controls:DataGridTextColumn Header="D3" Binding="{Binding mTemp[2]}"/>
+                            <controls:DataGridTextColumn Header="D4" Binding="{Binding mTemp[3]}"/>
+                            <controls:DataGridTextColumn Header="D5" Binding="{Binding mTemp[4]}"/>
+                            <controls:DataGridTextColumn Header="D6" Binding="{Binding mTemp[5]}"/>
+                            <controls:DataGridTextColumn Header="D7" Binding="{Binding mTemp[6]}"/>
+                            <controls:DataGridTextColumn Header="D8" Binding="{Binding mTemp[7]}"/>
+                            <controls:DataGridTextColumn Header="D9" Binding="{Binding mTemp[8]}"/>
+                            <controls:DataGridTextColumn Header="D10" Binding="{Binding mTemp[9]}"/>
+                            <controls:DataGridTextColumn Header="D11" Binding="{Binding mTemp[10]}"/>
+                            <controls:DataGridTextColumn Header="D12" Binding="{Binding mTemp[11]}"/>
+
+
+                        </controls:DataGrid.Columns>
+                    </controls:DataGrid>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="Нейтроны">
+                <controls:DataGrid x:Name="NeutronGrid"
+                
+                  AutoGenerateColumns="False">
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTextColumn Header="Date"
+                                             Binding="{Binding dateTime}"/>
+                        <controls:DataGridTextColumn Header="Temp" Binding="{Binding colSob}"/>
+                        <controls:DataGridTextColumn Header="D1" Binding="{Binding mTemp[0]}"/>
+                        <controls:DataGridTextColumn Header="D2" Binding="{Binding mTemp[1]}"/>
+                        <controls:DataGridTextColumn Header="D3" Binding="{Binding mTemp[2]}"/>
+                        <controls:DataGridTextColumn Header="D4" Binding="{Binding mTemp[3]}"/>
+                        <controls:DataGridTextColumn Header="D5" Binding="{Binding mTemp[4]}"/>
+                        <controls:DataGridTextColumn Header="D6" Binding="{Binding mTemp[5]}"/>
+                        <controls:DataGridTextColumn Header="D7" Binding="{Binding mTemp[6]}"/>
+                        <controls:DataGridTextColumn Header="D8" Binding="{Binding mTemp[7]}"/>
+                        <controls:DataGridTextColumn Header="D9" Binding="{Binding mTemp[8]}"/>
+                        <controls:DataGridTextColumn Header="D10" Binding="{Binding mTemp[9]}"/>
+                        <controls:DataGridTextColumn Header="D11" Binding="{Binding mTemp[10]}"/>
+                        <controls:DataGridTextColumn Header="D12" Binding="{Binding mTemp[11]}"/>
+
+
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
+            </PivotItem>
+        </Pivot>
+
+
+    </Grid>
+</Page>

@@ -1,0 +1,286 @@
+﻿<Page
+    x:Class="DataYRAN.BlankPageShowMap"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DataYRAN"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="424"/>
+            <ColumnDefinition Width="10*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button VerticalAlignment="Top" HorizontalAlignment="Left"  Style="{StaticResource NavigationBackButtonNormalStyle}" Margin="40,0,0,0" Click="Button_Click"/>
+        <ListView ItemsSource="{x:Bind ViewModelMaps.ClassSobs}" x:Name="ListSob" SelectionChanged="ListSob_SelectionChanged" Grid.RowSpan="2" Margin="0,40,0,8">
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <Grid Padding="6" Background="{ThemeResource SystemBaseLowColor}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="18"/>
+                            <RowDefinition Height="18"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Время" Grid.ColumnSpan="2" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                        <TextBlock Grid.Row="1" Text="СуммАмп" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                        <TextBlock Grid.Column="2" Grid.Row="1" Text="СуммНейтрон" Style="{ThemeResource CaptionTextBlockStyle}" Margin="4,0,0,0"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
+            <ListView.ItemTemplate>
+                <DataTemplate x:Name="TableDataTemplate" x:DataType="local:ClassSob">
+                    <Grid Height="48">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="18"/>
+                            <RowDefinition Height="18"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.ColumnSpan="2" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{x:Bind time}" />
+                        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Bind SumAmp}"/>
+                        <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Text="{x:Bind SumNeu}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ScrollViewer Grid.Column="1" Grid.RowSpan="2" VerticalScrollMode="Auto">
+            <StackPanel Grid.Column="1" x:Name="List54" DataContext="{Binding SelectedItem, ElementName=ListSob}" Margin="0,4,0,0" >
+
+            <Grid Padding="12" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="N" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                <TextBlock Text="Амплитуда" Grid.Column="1" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                <TextBlock Grid.Column="2" Text="Нейтрон" x:Uid="BB" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                <TextBlock Grid.Column="3" Text="Сигмма" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                <TextBlock Grid.Column="4" Text="NullLine"  Style="{ThemeResource CaptionTextBlockStyle}"/>
+                <TextBlock Grid.Column="5" Text="TimeSig" Style="{ThemeResource CaptionTextBlockStyle}"/>
+            </Grid>
+            <Grid Height="36" AutomationProperties.Name="x:String" Padding="12" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"  VerticalAlignment="Center" Text="1"/>
+                <TextBlock Grid.Column="1"  VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{Binding mAmp[0]}" >
+
+                </TextBlock>
+                <TextBlock Grid.Column="2"  VerticalAlignment="Center" Text="{Binding Nnut0}"/>
+                <TextBlock Grid.Column="3"  VerticalAlignment="Center" Text="{Binding sig0}"/>
+                <TextBlock Grid.Column="4"  VerticalAlignment="Center" Text="{Binding Nnull0}"/>
+                <TextBlock Grid.Column="5"  VerticalAlignment="Center" Text="{Binding TimeS0}"/>
+            </Grid>
+            <Grid Height="36" AutomationProperties.Name="x:String" Padding="12" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"  VerticalAlignment="Center" Text="2"/>
+                <TextBlock Grid.Column="1"  VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{Binding mAmp[1]}" />
+                <TextBlock Grid.Column="2"  VerticalAlignment="Center" Text="{Binding Nnut1}"/>
+                <TextBlock Grid.Column="3"  VerticalAlignment="Center" Text="{Binding sig1}"/>
+                <TextBlock Grid.Column="4"  VerticalAlignment="Center" Text="{Binding Nnull1}"/>
+                <TextBlock Grid.Column="5"  VerticalAlignment="Center" Text="{Binding TimeS1}"/>
+            </Grid>
+            <Grid Height="36" AutomationProperties.Name="x:String" Padding="12" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"  VerticalAlignment="Center" Text="3"/>
+                <TextBlock Grid.Column="1"  VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{Binding mAmp[2]}" />
+                <TextBlock Grid.Column="2"  VerticalAlignment="Center" Text="{Binding Nnut2}"/>
+                <TextBlock Grid.Column="3"  VerticalAlignment="Center" Text="{Binding sig2}"/>
+                <TextBlock Grid.Column="4"  VerticalAlignment="Center" Text="{Binding Nnull2}"/>
+                <TextBlock Grid.Column="5"  VerticalAlignment="Center" Text="{Binding TimeS2}"/>
+            </Grid>
+            <Grid Height="36" AutomationProperties.Name="x:String" Padding="12" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"  VerticalAlignment="Center" Text="4"/>
+                <TextBlock Grid.Column="1"  VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{Binding mAmp[3]}" />
+                <TextBlock Grid.Column="2"  VerticalAlignment="Center" Text="{Binding Nnut3}"/>
+                <TextBlock Grid.Column="3"  VerticalAlignment="Center" Text="{Binding sig3}"/>
+                <TextBlock Grid.Column="4"  VerticalAlignment="Center" Text="{Binding Nnull3}"/>
+                <TextBlock Grid.Column="5"  VerticalAlignment="Center" Text="{Binding TimeS3}"/>
+            </Grid>
+            <Grid Height="36" AutomationProperties.Name="x:String" Padding="12" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"  VerticalAlignment="Center" Text="5"/>
+                <TextBlock Grid.Column="1"  VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{Binding mAmp[4]}" />
+                <TextBlock Grid.Column="2"  VerticalAlignment="Center" Text="{Binding Nnut4}"/>
+                <TextBlock Grid.Column="3"  VerticalAlignment="Center" Text="{Binding sig4}"/>
+                <TextBlock Grid.Column="4"  VerticalAlignment="Center" Text="{Binding Nnull4}"/>
+                <TextBlock Grid.Column="5"  VerticalAlignment="Center" Text="{Binding TimeS4}"/>
+            </Grid>
+            <Grid Height="36" AutomationProperties.Name="x:String" Padding="12" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"  VerticalAlignment="Center" Text="6"/>
+                <TextBlock Grid.Column="1"  VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{Binding mAmp[5]}" />
+                <TextBlock Grid.Column="2"  VerticalAlignment="Center" Text="{Binding Nnut5}"/>
+                <TextBlock Grid.Column="3"  VerticalAlignment="Center" Text="{Binding sig5}"/>
+                <TextBlock Grid.Column="4"  VerticalAlignment="Center" Text="{Binding Nnull5}"/>
+                <TextBlock Grid.Column="5"  VerticalAlignment="Center" Text="{Binding TimeS5}"/>
+            </Grid>
+            <Grid Height="36" AutomationProperties.Name="x:String" Padding="12" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"  VerticalAlignment="Center" Text="7"/>
+                <TextBlock Grid.Column="1"  VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{Binding mAmp[6]}" />
+                <TextBlock Grid.Column="2"  VerticalAlignment="Center" Text="{Binding Nnut6}"/>
+                <TextBlock Grid.Column="3"  VerticalAlignment="Center" Text="{Binding sig6}"/>
+                <TextBlock Grid.Column="4"  VerticalAlignment="Center" Text="{Binding Nnull6}"/>
+                <TextBlock Grid.Column="5"  VerticalAlignment="Center" Text="{Binding TimeS6}"/>
+            </Grid>
+            <Grid Height="36" AutomationProperties.Name="x:String" Padding="12" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"  VerticalAlignment="Center" Text="8"/>
+                <TextBlock Grid.Column="1"  VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{Binding mAmp[7]}" />
+                <TextBlock Grid.Column="2"  VerticalAlignment="Center" Text="{Binding Nnut7}"/>
+                <TextBlock Grid.Column="3"  VerticalAlignment="Center" Text="{Binding sig7}"/>
+                <TextBlock Grid.Column="4"  VerticalAlignment="Center" Text="{Binding Nnull7}"/>
+                <TextBlock Grid.Column="5"  VerticalAlignment="Center" Text="{Binding TimeS7}"/>
+            </Grid>
+            <Grid Height="36" AutomationProperties.Name="x:String" Padding="12" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"  VerticalAlignment="Center" Text="9"/>
+                <TextBlock Grid.Column="1"  VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{Binding mAmp[8]}" />
+                <TextBlock Grid.Column="2"  VerticalAlignment="Center" Text="{Binding Nnut8}"/>
+                <TextBlock Grid.Column="3"  VerticalAlignment="Center" Text="{Binding sig8}"/>
+                <TextBlock Grid.Column="4"  VerticalAlignment="Center" Text="{Binding Nnull8}"/>
+                <TextBlock Grid.Column="5"  VerticalAlignment="Center" Text="{Binding TimeS8}"/>
+            </Grid>
+            <Grid Height="36" AutomationProperties.Name="x:String" Padding="12" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"  VerticalAlignment="Center" Text="10"/>
+                <TextBlock Grid.Column="1"  VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{Binding mAmp[9]}" />
+                <TextBlock Grid.Column="2"  VerticalAlignment="Center" Text="{Binding Nnut9}"/>
+                <TextBlock Grid.Column="3"  VerticalAlignment="Center" Text="{Binding sig9}"/>
+                <TextBlock Grid.Column="4"  VerticalAlignment="Center" Text="{Binding Nnull9}"/>
+                <TextBlock Grid.Column="5"  VerticalAlignment="Center" Text="{Binding TimeS9}"/>
+            </Grid>
+            <Grid Height="36" AutomationProperties.Name="x:String" Padding="12" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"  VerticalAlignment="Center" Text="11"/>
+                <TextBlock Grid.Column="1"  VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{Binding mAmp[10]}" />
+                <TextBlock Grid.Column="2"  VerticalAlignment="Center" Text="{Binding Nnut10}"/>
+                <TextBlock Grid.Column="3"  VerticalAlignment="Center" Text="{Binding sig10}"/>
+                <TextBlock Grid.Column="4"  VerticalAlignment="Center" Text="{Binding Nnull10}"/>
+                <TextBlock Grid.Column="5"  VerticalAlignment="Center" Text="{Binding TimeS10}"/>
+            </Grid>
+            <Grid Height="36" AutomationProperties.Name="x:String" Padding="12" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"  VerticalAlignment="Center" Text="12"/>
+                <TextBlock Grid.Column="1"  VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{Binding mAmp[11]}" />
+                <TextBlock Grid.Column="2"  VerticalAlignment="Center" Text="{Binding Nnut11}"/>
+                <TextBlock Grid.Column="3"  VerticalAlignment="Center" Text="{Binding sig11}"/>
+                <TextBlock Grid.Column="4"  VerticalAlignment="Center" Text="{Binding Nnull11}"/>
+                <TextBlock Grid.Column="5"  VerticalAlignment="Center" Text="{Binding TimeS11}"/>
+
+            </Grid>
+
+        </StackPanel>
+        </ScrollViewer>
+
+        <Grid  ScrollViewer.VerticalScrollMode="Auto"  Grid.Column="2" x:Name="gr">
+            <TextBlock Text="События по амплитуде"/>
+            <local:MyUserControlURAN x:Name="Show1"/>
+        </Grid>
+        <Grid  ScrollViewer.VerticalScrollMode="Auto" Grid.Row="1" Grid.Column="2" x:Name="gr2">
+            <TextBlock Text="Нейтроны"/>
+            <local:MyUserControlURAN x:Name="Show2"/>
+        </Grid>
+    </Grid>
+</Page>
