@@ -10,10 +10,11 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <GridView Margin="28" x:Name="gridV" SelectionChanged="GridV_SelectionChanged">
+        <GridView Margin="28" x:Name="gridV" Grid.Row="1" SelectionChanged="GridV_SelectionChanged">
             <GridViewItem Padding="16" Tag="TabSob">
                 <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto" HorizontalScrollMode="Auto">
                     <StackPanel Height="260">
@@ -61,14 +62,10 @@
                 </ScrollViewer>
             </GridViewItem>
         </GridView>
-        <StackPanel Grid.Row="1">
+        <StackPanel Grid.Row="2">
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="24">
-                <TextBlock Text="Поля для загрузки" Margin="18,0,0,0"/>
-                <StackPanel Margin="8,0,0,0">
-                    <TextBlock Text="IP Adress"/>
-                    <TextBox x:Name="textip" />
-                    <Button Content="Применить" Click="Button_Click_1"/>
-                </StackPanel>
+                
+                
                 <StackPanel Margin="8,0,0,0">
                     <TextBlock Text="Параметры отбора" FontSize="22"/>
                     <TextBlock  Text="Диапозон даты и времени" />
@@ -107,8 +104,12 @@
                 <Button Content="Применить" Click="Button_Click_1"/>
             </StackPanel>
         </StackPanel>
-        <Button VerticalAlignment="Bottom" Content="Добавить таблицу" IsEnabled="False"/>
-        <Button VerticalAlignment="Bottom" Content="Далее" Click="Button_Click" Grid.Row="1" HorizontalAlignment="Right" Margin="24"/>
+        <StackPanel>
+            <TextBox Header="Путь к БД" x:Name="Path" Text="C:\"/>
+            <Button VerticalAlignment="Bottom" Content="Указать путь" Click="Button_Click_4"/>
+        </StackPanel>
+        
+        <Button VerticalAlignment="Bottom" Content="Далее" Click="Button_Click" Grid.Row="2" HorizontalAlignment="Right" Margin="24"/>
 
     </Grid>
 </Page>

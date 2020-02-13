@@ -10,6 +10,6 @@ namespace DataYRAN
     {
       public List<string> listsql { get; set; }
         public bool flagP = true;
-        public string ip = "192.168.1.155";
+        public string Path { get; set; }
     }
 }

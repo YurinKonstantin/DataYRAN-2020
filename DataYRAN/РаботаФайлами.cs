@@ -143,6 +143,7 @@ namespace DataYRAN
                 await SaveSob12d7dras(storageFolderPeogect, "СобытияФайла12d7dZavisimost", "txt", cul);
                 await SaveSobPloxN(storageFolderPeogect, "СобытияФайлаBadN", "txt", cul);
                 await SaveSobV(storageFolderPeogect, "СобытияФайлаV", "txt", cul);
+                await SaveSobVSumBin(storageFolderPeogect, "СобытияФайлаVSumBin", "txt", cul);
                 await SaveSobPloxV(storageFolderPeogect, "СобытияФайлаBadV", "txt", cul);
                await SaveSobTimeСмешения_детектораNew(storageFolderPeogect, "ВременаСрабатДетекNew", "txt", cul);
 
@@ -249,13 +250,9 @@ namespace DataYRAN
                 // (including other sub-folder contents)
                 Windows.Storage.AccessCache.StorageApplicationPermissions.
                 FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-
                 StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-
                 StorageFolder storageFolderRazvertka = await storageFolder.CreateFolderAsync("Развертка", CreationCollisionOption.OpenIfExists);
-
-                IReadOnlyList<StorageFile> fileList =
-                    await storageFolderRazvertka.GetFilesAsync();
+                IReadOnlyList<StorageFile> fileList = await storageFolderRazvertka.GetFilesAsync();
                 if (fileList.Count != 0)
                 {
                     StorageFolder storageFolderSave =await folder.CreateFolderAsync("Развертка", CreationCollisionOption.GenerateUniqueName);
@@ -310,7 +307,6 @@ namespace DataYRAN
                         }
                     }
                 }
-              
             }
             else
             {
@@ -618,10 +614,9 @@ namespace DataYRAN
                         {
                             if (sob.Amp12d[j]>20 && sob.Amp7d[j]>10)
                             {
-                                i++;
-                                string Sob = i.ToString() + "\t" + sob.time + "\t" + sob.timeDalay.ToString() + "\t" +
-                                    sob.Amp12d[j].ToString() + "\t" + sob.Amp7d[j].ToString();
-                                await writer.WriteLineAsync(Sob);
+                             i++;
+                             string Sob = i.ToString() + "\t" + sob.time + "\t" + sob.timeDalay.ToString() + "\t" + sob.Amp12d[j].ToString() + "\t" + sob.Amp7d[j].ToString();
+                             await writer.WriteLineAsync(Sob);
                             }
                         }
                     }
@@ -677,22 +672,79 @@ namespace DataYRAN
                     string sSob = "n" + "\t" + "file" + "\t" + "kl" + "\t" + "PSB" + "\t" + "Time" + "\t" + "SA" + "\t" + "D" + "\t" + "AmpNV" + "\t" + "FirstTimeV" + "\t" + "MaxTime" + "\t"
                         + "AD1" + "\t" + "AD2" + "\t" + "AD3" + "\t" + "AD4" + "\t" + "AD5" + "\t" + "AD6" + "\t" + "AD7" + "\t" + "AD8" + "\t" + "AD9" + "\t" + "aD10" + "\t" + "AD11" + "\t" + "AD12" + "\t"
                         + "TD1" + "\t" + "TD2" + "\t" + "TD3" + "\t" + "TD4" + "\t" + "TD5" + "\t" + "TD6" + "\t" + "TD7" + "\t" + "TD8" + "\t" + "TD9" + "\t" + "TD10" + "\t" + "TD11" + "\t" + "TD12"
-                        + "\t" + "TMD1" + "\t" + "TMD2" + "\t" + "TMD3" + "\t" + "TMD4" + "\t" + "TMD5" + "\t" + "TMD6" + "\t" + "TMD7" + "\t" + "TMD8" + "\t" + "TMD9" + "\t" + "TMD10" + "\t" + "TMD11" + "\t" + "TMD12" + "\t" + "TPolMax" + "\t" + "TAmp14" + "\t" + "TAmp34";  
+                        + "\t" + "TMD1" + "\t" + "TMD2" + "\t" + "TMD3" + "\t" + "TMD4" + "\t" + "TMD5" + "\t" + "TMD6" + "\t" + "TMD7" + "\t" + "TMD8" + "\t" + "TMD9" + "\t" + "TMD10" + "\t" + "TMD11" + "\t" + "TMD12" + "\t" + "TPolMax" + "\t" + "TAmp14" + "\t" + "TAmp34"
+                         + "\t" + "Q1" + "\t" + "Q2" + "\t" + "Q3" + "\t" + "Q4" + "\t" + "Q5" + "\t" + "Q6" + "\t" + "Q7" + "\t" + "Q8" + "\t" + "Q9" 
+                         + "\t" + "Q10" + "\t" + "Q11" + "\t" + "Q12"+ "\t" + "sumSig1" + "\t" + "sumSig2" + "\t" + "sumSig3" + "\t" + "sumSig4" 
+                         + "\t" + "sumSig5" + "\t" + "sumSig6" + "\t" + "sumSig7" + "\t" + "sumSig8" + "\t" + "sumSig9"
+                         + "\t" + "sumSig10" + "\t" + "SumSig11" + "\t" + "SumSig12";
 
 
                     await writer.WriteLineAsync(sSob);
                     foreach (ClassSobV sob in ViewModel.ClassSobsV)
                     {
-                        i++;
-                        string Sob = i.ToString() + "\t" + sob.nameFile + "\t" + sob.nameklaster + "\t" + sob.nameBAAK.ToString() + "\t" + sob.time + "\t" +
-                       sob.SumAmp.ToString() + "\t" + sob.nV.ToString("00") + "\t" + sob.AmpNV.ToString() + "\t" + sob.FirstTimeV[sob.nV].ToString() + "\t" + sob.MaxTime.ToString("00") + "\t" + sob.Amp0.ToString() + "\t" + sob.Amp1.ToString() + "\t" + sob.Amp2.ToString() + "\t" + sob.Amp3.ToString() + "\t"
-                       + sob.Amp4.ToString() + "\t" + sob.Amp5.ToString() + "\t" + sob.Amp6.ToString() + "\t" + sob.Amp7.ToString() + "\t" + sob.Amp8.ToString() + "\t" +
-                       sob.Amp9.ToString() + "\t" + sob.Amp10.ToString() + "\t" + sob.Amp11.ToString() + "\t" + sob.maxTimeV[0].ToString() + "\t" + sob.maxTimeV[1].ToString() + "\t" + sob.maxTimeV[2].ToString() + "\t" + sob.maxTimeV[3].ToString() + "\t"
-                       + sob.maxTimeV[4].ToString() + "\t" + sob.maxTimeV[5].ToString() + "\t" + sob.maxTimeV[6].ToString() + "\t" + sob.maxTimeV[7].ToString() + "\t" + sob.maxTimeV[8].ToString() + "\t" +
-                       sob.maxTimeV[9].ToString() + "\t" + sob.maxTimeV[10].ToString() + "\t" + sob.maxTimeV[11].ToString() + "\t" + sob.FirstTimeV[0].ToString() + "\t" + sob.FirstTimeV[1].ToString() + "\t" + sob.FirstTimeV[2].ToString() + "\t" + sob.FirstTimeV[3].ToString() + "\t"
-                       + sob.FirstTimeV[4].ToString() + "\t" + sob.FirstTimeV[5].ToString() + "\t" + sob.FirstTimeV[6].ToString() + "\t" + sob.FirstTimeV[7].ToString() + "\t" + sob.FirstTimeV[8].ToString() + "\t" +
-                       sob.FirstTimeV[9].ToString() + "\t" + sob.FirstTimeV[10].ToString() + "\t" + sob.FirstTimeV[11].ToString() + "\t" + sob.PolmaxTimeV[0].ToString() + "\t" + sob.chNeutrons.ElementAt(0).Amp14.ToString() + "\t" + sob.chNeutrons.ElementAt(0).Amp34.ToString(); 
-                        await writer.WriteLineAsync(Sob);
+                        try
+                        {
+
+
+                            i++;
+                            string Sob = i.ToString() + "\t" + sob.nameFile + "\t" + sob.nameklaster + "\t" + sob.nameBAAK.ToString() + "\t" + sob.time + "\t" +
+                           sob.SumAmp.ToString() + "\t" + sob.nV.ToString("00") + "\t" + sob.AmpNV.ToString() + "\t" + sob.FirstTimeV[sob.nV].ToString() + "\t" + sob.MaxTime.ToString("00") + "\t" + sob.Amp0.ToString() + "\t" + sob.Amp1.ToString() + "\t" + sob.Amp2.ToString() + "\t" + sob.Amp3.ToString() + "\t"
+                           + sob.Amp4.ToString() + "\t" + sob.Amp5.ToString() + "\t" + sob.Amp6.ToString() + "\t" + sob.Amp7.ToString() + "\t" + sob.Amp8.ToString() + "\t" +
+                           sob.Amp9.ToString() + "\t" + sob.Amp10.ToString() + "\t" + sob.Amp11.ToString() + "\t" + sob.maxTimeV[0].ToString() + "\t" + sob.maxTimeV[1].ToString() + "\t" + sob.maxTimeV[2].ToString() + "\t" + sob.maxTimeV[3].ToString() + "\t"
+                           + sob.maxTimeV[4].ToString() + "\t" + sob.maxTimeV[5].ToString() + "\t" + sob.maxTimeV[6].ToString() + "\t" + sob.maxTimeV[7].ToString() + "\t" + sob.maxTimeV[8].ToString() + "\t" +
+                           sob.maxTimeV[9].ToString() + "\t" + sob.maxTimeV[10].ToString() + "\t" + sob.maxTimeV[11].ToString() + "\t" + sob.FirstTimeV[0].ToString() + "\t" + sob.FirstTimeV[1].ToString() + "\t" + sob.FirstTimeV[2].ToString() + "\t" + sob.FirstTimeV[3].ToString() + "\t"
+                           + sob.FirstTimeV[4].ToString() + "\t" + sob.FirstTimeV[5].ToString() + "\t" + sob.FirstTimeV[6].ToString() + "\t" + sob.FirstTimeV[7].ToString() + "\t" + sob.FirstTimeV[8].ToString() + "\t" +
+                           sob.FirstTimeV[9].ToString() + "\t" + sob.FirstTimeV[10].ToString() + "\t" + sob.FirstTimeV[11].ToString() + "\t" + sob.PolmaxTimeV[0].ToString() + "\t" + sob.chNeutrons.ElementAt(0).Amp14.ToString() + "\t" + sob.chNeutrons.ElementAt(0).Amp34.ToString()
+
+                           + "\t" + sob.QS0.ToString() + "\t" + sob.QS1.ToString() + "\t" + sob.QS2.ToString() + "\t"
+                           + sob.QS3.ToString() + "\t" + sob.QS4.ToString() + "\t" + sob.QS5.ToString() + "\t" + sob.QS6.ToString() + "\t" + sob.QS7.ToString()
+                           + "\t" + sob.QS8.ToString() + "\t" + sob.QS9.ToString() + "\t" + sob.QS10.ToString() + "\t" + sob.QS11.ToString() 
+                           + "\t" + sob.sumsig[0].ToString() + "\t" + sob.sumsig[1].ToString() + "\t" + sob.sumsig[2].ToString() + "\t"
+                           + sob.sumsig[3].ToString() + "\t" + sob.sumsig[4].ToString() + "\t" + sob.sumsig[5].ToString() + "\t" + sob.sumsig[6].ToString() + "\t" + sob.sumsig[7].ToString()
+                           + "\t" + sob.sumsig[8].ToString() + "\t" + sob.sumsig[9].ToString() + "\t" + sob.sumsig[10].ToString() + "\t" + sob.sumsig[11].ToString();
+                            await writer.WriteLineAsync(Sob);
+                        }
+                        catch(Exception ex)
+                        {
+                            await new MessageDialog(ex.ToString()).ShowAsync();
+                        }
+                    }
+                }
+            }
+
+        }
+        public async Task SaveSobVSumBin(StorageFolder folder, String name, string tip, string cul)
+        {
+            int i = 0;
+            if (ViewModel.ClassSobsV.Count != 0)
+            {
+                using (StreamWriter writer =
+               new StreamWriter(await folder.OpenStreamForWriteAsync(
+               name + "." + tip, CreationCollisionOption.GenerateUniqueName)))
+                {
+                    string sSob = "n" + "\t" + "file" + "\t" + "kl" + "\t" + "PSB" + "\t" + "Time" + "\t" + "sumB1" + "\t" + "sumB2" + "\t" + "sumB3" + "\t" + "sumB4"
+                         + "\t" + "sumB5" + "\t" + "sumB6" + "\t" + "sumB7" + "\t" + "sumB8" + "\t" + "sumB9"
+                         + "\t" + "sumB10" + "\t" + "SumB11" + "\t" + "SumB12";
+
+
+                    await writer.WriteLineAsync(sSob);
+                    foreach (ClassSobV sob in ViewModel.ClassSobsV)
+                    {
+                        try
+                        {
+
+
+                            i++;
+                            string Sob = i.ToString() + "\t" + sob.nameFile + "\t" + sob.nameklaster + "\t" + sob.nameBAAK.ToString() + "\t" + sob.time 
+                           + "\t" + sob.sumBin[0].ToString() + "\t" + sob.sumBin[1].ToString() + "\t" + sob.sumBin[2].ToString() + "\t"
+                           + sob.sumBin[3].ToString() + "\t" + sob.sumBin[4].ToString() + "\t" + sob.sumBin[5].ToString() + "\t" + sob.sumBin[6].ToString() + "\t" + sob.sumBin[7].ToString()
+                           + "\t" + sob.sumBin[8].ToString() + "\t" + sob.sumBin[9].ToString() + "\t" + sob.sumBin[10].ToString() + "\t" + sob.sumBin[11].ToString();
+                            await writer.WriteLineAsync(Sob);
+                        }
+                        catch (Exception ex)
+                        {
+                            await new MessageDialog(ex.ToString()).ShowAsync();
+                        }
                     }
                 }
             }
@@ -734,9 +786,7 @@ namespace DataYRAN
             int i = 0;
             if (ViewModel.ClassSobsN.Count != 0)
             {
-                using (StreamWriter writer =
-               new StreamWriter(await folder.OpenStreamForWriteAsync(
-               name + tip, CreationCollisionOption.GenerateUniqueName)))
+                using (StreamWriter writer =new StreamWriter(await folder.OpenStreamForWriteAsync(name + tip, CreationCollisionOption.GenerateUniqueName)))
                 {
                     string sSob = "n" + "\t" + "file" + "\t" + "kl" + "\t" + "PSB" + "\t" + "Time" + "\t" + "SA" + "\t" + "SQ" + "\t" + "\t" + "AD1" + "\t" + "AD2" + "\t" + "AD3" + "\t" + "AD4" + "\t" + "AD5" + "\t" + "AD6" + "\t" + "AD7" + "\t" + "AD8" + "\t" + "AD9" + "\t" + "aD10" + "\t" + "AD11" + "\t" + "AD12" +
                                "\t" + "QD1" + "\t" + "QD2" + "\t" + "QD3" + "\t" + "QD4" + "\t" + "QD5" + "\t" + "QD6" + "\t" + "QD7" + "\t" + "QD8" + "\t" + "QD9" + "\t" + "QD10" + "\t" + "QD11" + "\t" + "QD12";
@@ -745,14 +795,23 @@ namespace DataYRAN
                     await writer.WriteLineAsync(sSob);
                     foreach (ClassSobN sob in ViewModel.ClassSobsN)
                     {
-                        i++;
-                        string Sob = i.ToString() + "\t" + sob.nameFile + "\t" + sob.nameklaster + "\t" + sob.nameBAAK.ToString() + "\t" + sob.time + "\t" +
-                       sob.SumAmp + "\t" + sob.Qsum.Sum().ToString() + "\t" + sob.Amp0.ToString() + "\t" + sob.Amp1.ToString() + "\t" + sob.Amp2.ToString() + "\t" + sob.Amp3.ToString() + "\t"
-                       + sob.Amp4.ToString() + "\t" + sob.Amp5.ToString() + "\t" + sob.Amp6.ToString() + "\t" + sob.Amp7.ToString() + "\t" + sob.Amp8.ToString() + "\t" +
-                       sob.Amp9.ToString() + "\t" + sob.Amp10.ToString() + "\t" + sob.Amp11.ToString() + "\t" + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t"
-                       + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t" +
-                       sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t";
-                        await writer.WriteLineAsync(Sob);
+                        try
+                        {
+
+
+                            i++;
+                            string Sob = i.ToString() + "\t" + sob.nameFile + "\t" + sob.nameklaster + "\t" + sob.nameBAAK.ToString() + "\t" + sob.time + "\t" +
+                           sob.SumAmp + "\t" + sob.Qsum.Sum().ToString() + "\t" + sob.Amp0.ToString() + "\t" + sob.Amp1.ToString() + "\t" + sob.Amp2.ToString() + "\t" + sob.Amp3.ToString() + "\t"
+                           + sob.Amp4.ToString() + "\t" + sob.Amp5.ToString() + "\t" + sob.Amp6.ToString() + "\t" + sob.Amp7.ToString() + "\t" + sob.Amp8.ToString() + "\t" +
+                           sob.Amp9.ToString() + "\t" + sob.Amp10.ToString() + "\t" + sob.Amp11.ToString() + "\t" + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t"
+                           + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t" +
+                           sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t" + sob.QS0.ToString() + "\t";
+                            await writer.WriteLineAsync(Sob);
+                        }
+                        catch(Exception)
+                        {
+
+                        }
                     }
                 }
             }
@@ -792,12 +851,7 @@ namespace DataYRAN
             int ii = 0;
             if (ViewModel.ClassSobsT.Count != 0)
             {
-
-
-
-                using (StreamWriter writer =
-               new StreamWriter(await folder.OpenStreamForWriteAsync(
-               name + "." + tip, CreationCollisionOption.GenerateUniqueName)))
+                using (StreamWriter writer =new StreamWriter(await folder.OpenStreamForWriteAsync(name + "." + tip, CreationCollisionOption.GenerateUniqueName)))
                 {
                     string sNeu = "n" + "\t" + "file" + "\t" + "D" + "\t" + "A" + "\t" + "Time" + "\t" + "tf" + "\t" + "tf3" + "\t" + "tmax" + "\t" + "tend3" + "\t" + "tend";
                     await writer.WriteLineAsync(sNeu);
@@ -809,6 +863,7 @@ namespace DataYRAN
 
                             foreach (ClassSobNeutron sobNeutron in classSob.classSobNeutronsList)
                             {
+
                                 ii++;
                                 string Sob = ii.ToString() + "\t" + classSob.nameFile + "\t" + sobNeutron.D.ToString("00") + "\t" + sobNeutron.Amp.ToString() + "\t" + classSob.time + "\t" + sobNeutron.TimeFirst.ToString() + "\t" + sobNeutron.TimeFirst3.ToString() +
                                     "\t" + sobNeutron.TimeAmp.ToString() + "\t" + sobNeutron.TimeEnd3.ToString() + "\t" + sobNeutron.TimeEnd.ToString();

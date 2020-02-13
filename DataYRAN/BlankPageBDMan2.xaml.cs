@@ -27,6 +27,7 @@ namespace DataYRAN
         {
             this.InitializeComponent();
             listsql1 = new List<string>();
+            listsql1.Add("SELECT * from События");
             ClassBDMan2 = new ClassBDMan2();
 
         }
@@ -34,27 +35,10 @@ namespace DataYRAN
         List<string> listsql1;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            ClassBDMan2.Path = Path.Text;
             this.Frame.Navigate(typeof(BlankPageObrData), ClassBDMan2);
         }
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            if (e.Parameter is ClassBDMan2)
-            {
-                ClassBDMan2 = (ClassBDMan2)e.Parameter;
-                //  listsql1.Add("select top 100 * from [Событие] where Плата = 'У1' order by Код desc");
-                //   listsql1.Add("select * from [Нейтроны] order by Код desc");
-                listsql1 = ClassBDMan2.listsql;
-                gridV.SelectedIndex = 0;
-                textip.Text = ClassBDMan2.ip;
-
-            }
-            else
-            {
-
-            }
-
-            base.OnNavigatedTo(e);
-        }
+   
         private void GridV_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             GridView gridView = (GridView)sender;
@@ -64,23 +48,23 @@ namespace DataYRAN
             {
 
                 textSql.Text = listsql1.ElementAt(0);
-                textip.Text = ClassBDMan2.ip;
+            
 
             }
             if (tag.ToString() == "TabN")
             {
-                textSql.Text = listsql1.ElementAt(1);
-                textip.Text = ClassBDMan2.ip;
+                //textSql.Text = listsql1.ElementAt(1);
+            
             }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             string txtsql = textSql.Text;
-            int x = gridV.SelectedIndex;
-            listsql1.RemoveAt(x);
-            listsql1.Insert(x, txtsql);
-            ClassBDMan2.ip = textip.Text;
+            //int x = gridV.SelectedIndex;
+            listsql1.RemoveAt(0);
+            listsql1.Insert(0, txtsql);
+        
         }
 
      
@@ -228,6 +212,26 @@ namespace DataYRAN
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private async void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            picker.FileTypeFilter.Add(".db");
+            picker.FileTypeFilter.Add(".DB");
+            picker.FileTypeFilter.Add(".db3");
+
+            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+            if (file != null)
+            {
+                Path.Text = file.Path;
+            }
+            else
+            {
+
+            }
         }
     }
 }

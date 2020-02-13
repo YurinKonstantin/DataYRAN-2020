@@ -78,14 +78,16 @@ namespace DataYRAN
             if (e.Parameter is ClassBDMan2)
             {
                 ClassBDMan2 classBD = (ClassBDMan2)e.Parameter;
-                if (!classBD.flagP)
-                {
+             
                     ObRing.IsActive = true;
-                   
-                   await StartClientBD(classBD.listsql.ElementAt(0), classBD.ip);
+
+                    BDWork.BDAcces.Path = classBD.Path;
+                   await BDWork.BDAcces.GetDataSob(String.Empty, ViewModel.classSobs);
+
+                    await new MessageDialog("End").ShowAsync();
                     ObRing.IsActive = false;
 
-                }
+                
             }
             else
             {
@@ -503,7 +505,25 @@ namespace DataYRAN
         {
             try
             {
-            
+                var picker = new Windows.Storage.Pickers.FileOpenPicker();
+                picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+                picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+                picker.FileTypeFilter.Add(".db");
+                picker.FileTypeFilter.Add(".DB");
+                picker.FileTypeFilter.Add(".db3");
+
+                Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+                if (file != null)
+                {
+                    BDWork.BDAcces.Path = file.Path;
+                    BDWork.BDAcces.GetDataSob(String.Empty, ViewModel.classSobs);
+                  
+                    await new MessageDialog("End").ShowAsync();
+                }
+                else
+                {
+                   
+                }
             }
             catch(Exception ex)
             {
@@ -659,19 +679,6 @@ namespace DataYRAN
         {
             if (DataGrid.SelectedItem != null)
             {
-
-
-                // this.DataGrid.ShowRowDetailsForItem(newCheckedItem);
-
-                //  else
-
-                //  this.DataGrid.HideRowDetailsForItem(newCheckedItem);
-
-
-
-
-
-
                 ind = DataGrid.SelectedItem;
 
                 if (ind.ToString() == "DataYRAN.ClassSob")
@@ -679,12 +686,7 @@ namespace DataYRAN
                     try
                     {
 
-
                         ClassSob classSob = (ClassSob)DataGrid.SelectedItem;
-                      
-                     
-                        
-                       
                         List<ClassSob> classSobsL = new List<ClassSob>();
                         classSobsL.Add(classSob);
                         await MyUser.ShowDetecAsync(classSobsL);
@@ -695,15 +697,8 @@ namespace DataYRAN
                         MessageDialog messageDialog = new MessageDialog(ex.ToString());
                         await messageDialog.ShowAsync();
                     }
-
                 }
-
-
-         
-
-
             }
-
             else
             {
                
@@ -754,20 +749,7 @@ namespace DataYRAN
         private  void UserSetUp_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(SetUpUser));
-            /*  CoreApplicationView newView = CoreApplication.CreateNewView();
-              int newViewId = 0;
-              await newView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-              {
-                  Frame frame = new Frame();
-                  frame.Navigate(typeof(SetUpUser), null);
-                  Window.Current.Content = frame;
-                  // You have to activate the window in order to show it later.
-                  Window.Current.Activate();
-
-                  newViewId = ApplicationView.GetForCurrentView().Id;
-              });
-              bool viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
-              */
+          
 
         }
         private async void SaveUserSetUp_clic(object sender, RoutedEventArgs e)
@@ -841,15 +823,7 @@ namespace DataYRAN
             await mess.ShowAsync();
         }
   
-        private Double Sum(List<int> n, double x)
-        {
-            Double res = 0;
-            foreach (int i in n)
-            {
-                res = res + Math.Pow((i - x), 2);
-            }
-            return res;
-        }
+      
    
         private void AppBarButton_Clear(object sender, RoutedEventArgs e)
         {
@@ -1220,30 +1194,18 @@ namespace DataYRAN
                 List<int> listFregAll = new List<int>();
                 List<int> listFregCh1 = new List<int>();
                 string stat=String.Empty;
-
-        
-              
-                var SobeGroupsAll = classSobs.GroupBy(p => p.SumAmp).OrderBy(g=>g.Key)
-                        .Select(g => new { SumAmp = g.Key, Count = g.Count() });
-            
+                var SobeGroupsAll = classSobs.GroupBy(p => p.SumAmp).OrderBy(g=>g.Key).Select(g => new { SumAmp = g.Key, Count = g.Count() });
                 stat += "Amp" + "\t" + "FAКнAll" + "\n";
-
                 foreach (var group in SobeGroupsAll)
                 {
                     stat += Convert.ToString(group.SumAmp) + "\t" + group.Count.ToString() + "\n";
-                 
                 }
 
-                
-                  var SobeGroupsCh1 = classSobs.GroupBy(p => p.SumAmp).OrderBy(g => g.Key)
-                        .Select(g => new { SumAmp = g.Key, Count = g.Count() });
-
+                  var SobeGroupsCh1 = classSobs.GroupBy(p => p.SumAmp).OrderBy(g => g.Key).Select(g => new { SumAmp = g.Key, Count = g.Count() });
                 stat += "Amp" + "\t"  + "FAКн1" + "\n";
-              
                 foreach (var group in SobeGroupsCh1)
                 {
                     stat += Convert.ToString(group.SumAmp) + "\t" + group.Count.ToString() + "\n";
-
                 }
                 EditorG.Document.SetText(Windows.UI.Text.TextSetOptions.ApplyRtfDocumentDefaults, stat);
                 this.radChart.DataContext = new double[] { 20, 30, 50, 10, 60, 40, 20, 80 };
@@ -1668,9 +1630,6 @@ contentDialog.Content = "Дождитесь закрытия этого окна
         {
             try
             {
-
-
-
                 int MaxDur = Convert.ToInt16(TimeGate.Text);
                 int MaxAmpl = Convert.ToInt16(MinAmplDetect.Text);
                 int MinClust = Convert.ToInt16(MinClustDec.Text);
@@ -1679,30 +1638,21 @@ contentDialog.Content = "Дождитесь закрытия этого окна
                 {
                     Title = "Поиск общих событий",
                     Content = "Дождитесь закрытия этого окна." + "\n" + "Идет процесс ...",
-
                 };
                 contentDialog.ShowAsync();
                 await Task.Run(() => ObchSobURAN(MaxDur, MaxAmpl, MinClust, minAmpN, contentDialog));
                 contentDialog.Hide();
-
-
-
-
             }
             catch (Exception ex)
             {
                 MessageDialog messageDialog = new MessageDialog(ex.ToString());
                 await messageDialog.ShowAsync();
             }
-
         }
         private async void AppBarButton_Play1(object sender, RoutedEventArgs e)
         {
             try
             {
-
-
-
                 int MaxDur = 600;
                 int MaxAmpl = 10;
                 int MinClust = 1;
@@ -1968,7 +1918,6 @@ textOb.Text = listC.Count().ToString();
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
             gridMenedgerAddFile.Visibility = Visibility.Visible;
-            
         }
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
@@ -1999,9 +1948,6 @@ textOb.Text = listC.Count().ToString();
         }
         StorageFolder storage;
        
-
-        
-
         private async void Button_Click_7(object sender, RoutedEventArgs e)
         {
             DataPackage dataPackage = new DataPackage();
@@ -2252,6 +2198,33 @@ textOb.Text = listC.Count().ToString();
 
                 this.Frame.Navigate(typeof(StatObrabotka.StatIzmenInfoTemp.PageStatIzmen), classSobs);
             }
+        }
+        private async void BD_Click(object sender, RoutedEventArgs e)
+        {
+            if(ViewModel.ClassSobsT.Count()>0)
+            {
+                ContentDialog noWifiDialog = new ContentDialog
+                {
+                    Title = "События в таблице",
+                    Content = "в таблице уже есть события, желаете их оставить?",
+                    PrimaryButtonText = "Оставитьe",
+                    CloseButtonText = "Удалить"
+                };
+
+                ContentDialogResult result = await noWifiDialog.ShowAsync();
+                if (result == ContentDialogResult.Primary)
+                {
+                    // Delete the file.
+                }
+                else
+                {
+                    ViewModel.ClassSobsT.Clear();
+                }
+            }
+           
+           
+                this.Frame.Navigate(typeof(BlankPageBDMan2));
+            
         }
     }
 }

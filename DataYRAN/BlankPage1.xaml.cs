@@ -83,7 +83,7 @@ namespace DataYRAN
             }
             if(tag.ToString() == "BD")
             {
-                this.Frame.Navigate(typeof(BlankPageBDMan));
+               
             }
             
             

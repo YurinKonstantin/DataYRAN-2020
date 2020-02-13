@@ -45,6 +45,7 @@ namespace DataYRAN
         public int MaxTime { get; set; }
 
     }
+   
     public class ClassSobV
     {
      public List<ChNeutron> chNeutrons { get; set; }
@@ -160,6 +161,7 @@ namespace DataYRAN
         {
             get
             {
+                
                 double[] vs = new double[12];
                 vs[0] = QS0;
                 vs[1] = QS1;
@@ -179,5 +181,7 @@ namespace DataYRAN
 
 
         }
+        public int[] sumsig { get; set; }
+        public int[] sumBin { get; set; }
     }
 }

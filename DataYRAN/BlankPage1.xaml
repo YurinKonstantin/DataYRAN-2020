@@ -52,7 +52,7 @@
                         <RowDefinition Height="100"/>
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <Image Source="Assets\StoreLogo.scale-400.png" Width="100"/>
+                    <Image Source="Assets\620620.png" Width="100"/>
                    
                     <StackPanel Grid.Column="1" Grid.Row="1">
                         <TextBlock Text="Работа с файлами данных уран" FontSize="16"/>
@@ -60,19 +60,7 @@
                     </StackPanel>
                 </Grid>
             </GridViewItem>
-            <GridViewItem Width="280" Tag="BD" Margin="8">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="100"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Image Source="Assets\database.png" Width="100"/>
-                    <StackPanel Grid.Row="1">
-                        <TextBlock Text="Данные из БД" FontSize="16"/>
-                        <TextBlock Text="Загружает таблицы из БД с возможностью применения условий" TextWrapping="Wrap" FontSize="16"/>
-                    </StackPanel>
-                </Grid>
-            </GridViewItem>
+           
             <GridViewItem Width="280" Margin="8">
                 <Grid>
                     <Grid.RowDefinitions>

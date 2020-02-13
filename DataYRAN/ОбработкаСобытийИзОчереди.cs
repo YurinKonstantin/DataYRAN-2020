@@ -21,33 +21,24 @@ namespace DataYRAN
         public async Task WriteInFileIzOcherediAsync(CancellationToken cancellationToken, ClassUserSetUp classUserSetUp, string script)//работа с данными из очереди
         {
 
-
-           
-
                 while (true)
                 {
-                   
                     if (cancellationToken.IsCancellationRequested)
                     {
                         //Thread.Sleep(50);
                         while (OcherediNaObrab.Count >0)
                         {
-                        try
-                        {
-
-
+                           try
+                           {
                             await Obr(classUserSetUp, script);
-                        }
-                        catch(Exception ex)
-                        {
+                           }
+                           catch(Exception ex)
+                           {
 
-                        }
+                           }
                         }
                         break;
                     }
-               
-                
-
                     //if(OcherediNaObrab.Count > 0)
                     {
                         await Obr(classUserSetUp, script);
@@ -172,7 +163,15 @@ namespace DataYRAN
 
 
                                             clasNeu.Add(new ClassSobNeutron()
-                                            { D = dd, Amp = Amp, TimeAmp = countmaxtime, TimeEnd = countendtime, TimeEnd3 = countendtime3, TimeFirst = countfirsttime, TimeFirst3 = countfirsttime3 });
+                                            {
+                                                D = dd, 
+                                                Amp = Amp, 
+                                                TimeAmp = countmaxtime, 
+                                                TimeEnd = countendtime, 
+                                                TimeEnd3 = countendtime3, 
+                                                TimeFirst = countfirsttime, 
+                                                TimeFirst3 = countfirsttime3
+                                            });
 
                                         }
                                     }
@@ -198,38 +197,88 @@ namespace DataYRAN
             return clasNeu;
 
         }
-      
+        private int[] ColSigVatias(int[,] raz, double[] masnul)//out int[] coutN,
+        {
+           
+            int AmpOtbora = 5;
+            int[] coutN = new int[12];
+            int Nu;
+            int AmpOtbora1;
+           
+            for (int i = 0; i < 12; i++)
+            {
+                Nu = Convert.ToInt32(masnul[i]);
+                AmpOtbora1 = AmpOtbora + Nu;
+                for (int j = 349; j < 1024; j++)
+                {
+                   int Amp = raz[i, j];
+                   if (Amp >= AmpOtbora1)//ищем претендента на сигнал
+                   {
+                       int countendtime = j;
+                       int v = Amp;
+                       while (v > Nu+2)//ищем конец сигнала
+                            {
+                               countendtime++;
+                              
+                               if (countendtime >1023)
+                               {
+                                  break;
+                               }
+                               v = raz[i, countendtime];
+                              
+                            }
+                       coutN[i] += 1;
+                       j = countendtime;
+                   }
+                }             
+            }
+            return coutN;
+        }
+        private int[] ColBin(int[,] raz, double[] masnul)//out int[] coutN,
+        {
+
+            int AmpOtbora = 5;
+            int[] coutB = new int[12];
+            int Nu;
+            int AmpOtbora1;
+
+            for (int i = 0; i < 12; i++)
+            {
+                Nu = Convert.ToInt32(masnul[i]);
+                AmpOtbora1 = AmpOtbora + Nu;
+                for (int j = 349; j < 1024; j++)
+                {
+                    int Amp = raz[i, j];
+                    if (Amp >= AmpOtbora1)//ищем претендента на сигнал
+                    {
+                        coutB[i] += 1;
+                    }
+                }
+            }
+            return coutB;
+        }
         public async Task Obr(ClassUserSetUp classUserSetUp, string script)
         {
            
-               
-
-
                     string time1 = String.Empty;
                   bool b=  OcherediNaObrab.TryDequeue(out MyclasDataizFile ObrD);
                     if (b == true)
                     {
-
-
                         switch (ObrD.tipName)
                         {
-
                             case "T":
                                 try
                                 {
-
-                     
-                            string ss = ParserBAAK12.ParseBinFileBAAK12.ParseBinFileBAAK200H(ObrD.Buf00, out int[,] data1, out time1, out int[,] dataTail1);
-
+                                    string ss = ParserBAAK12.ParseBinFileBAAK12.ParseBinFileBAAK200H(ObrD.Buf00, out int[,] data1, out time1, out int[,] dataTail1);
                                     if (ss == "1")
                                     {
                                         int t = 0;
                                         string[] strTime = time1.Split('.');
                                         await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,
-            () =>
-            {
-                t = Convert.ToInt32(TimeCorect.Text);
-            });
+                                        () =>
+                                        {
+                                             t = Convert.ToInt32(TimeCorect.Text);
+                                        });
                               
                                 DataTimeUR dataTimeUR = new DataTimeUR(0, 0, Convert.ToInt16(strTime[0]), Convert.ToInt16(strTime[1]), Convert.ToInt16(strTime[2]) + t, Convert.ToInt16(strTime[3]),
                                              Convert.ToInt16(strTime[4]), Convert.ToInt16(strTime[5]), Convert.ToInt16(strTime[6]));
@@ -245,30 +294,22 @@ namespace DataYRAN
                                 }
                               
                                         time1 = strTime[0] + "." + strTime[1] + "." + (Convert.ToInt32(strTime[2]) + t).ToString("00") + "." + strTime[3] + "." + strTime[4] + "." + strTime[5] + "." + strTime[6];
-                               
-                                await ObrSigData(ObrD.NameFile, ObrD.NameBaaR12.ToString(), data1, dataTail1, time1, ObrD.tipName, classUserSetUp, dataTimeUR, script);
+                                        await ObrSigData(ObrD.NameFile, ObrD.NameBaaR12.ToString(), data1, dataTail1, time1, ObrD.tipName, classUserSetUp, dataTimeUR, script);
                                     }
-
-
-
-
                                     ObrD = null;
                                 }
                                 catch (Exception ex)
                                 {
                        
                                 }
-
                                 break;
                             case "N":
                                 try
                                 {
-                          
-                            int[,] dataTail1 = new int[12, 20000];
+                                    int[,] dataTail1 = new int[12, 20000];
                                     ParserBAAK12.ParseBinFileBAAK12.ParseBinFileBAAK200(ObrD.Buf00, 1, out int[,] data1, out time1);
                                     try
                                     {
-
                                         await SaveFileDelegate(data1, dataTail1, time1, ObrD.NameFile, false);
                                     }
                                     catch
@@ -280,10 +321,10 @@ namespace DataYRAN
                                         int t = 0;
                                         string[] strTime = time1.Split('.');
                                         await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,
-            () =>
-            {
-                t = Convert.ToInt32(TimeCorect.Text);
-            });
+                                        () =>
+                                        {
+                                           t = Convert.ToInt32(TimeCorect.Text);
+                                        });
                                         time1 = strTime[0] + "." + strTime[1] + "." + (Convert.ToInt32(strTime[2]) + t).ToString() + "." + strTime[3] + "." + strTime[4] + "." + strTime[5] + "." + strTime[6];
 
                                         await ObrSigData(ObrD.НулеваяЛиния, ObrD.NameFile, ObrD.NameBaaR12.ToString(), data1, time1, ObrD.tipName, classUserSetUp);
@@ -291,11 +332,11 @@ namespace DataYRAN
                                     catch (Exception ex)
                                     {
                                         await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,
-            () =>
-            {
-                var mess = new MessageDialog("dss" + "\n" + ex.Message.ToString() + "\n" + ex.ToString());
-                mess.ShowAsync();// КолПакетовОчер++;
-            });
+                                        () =>
+                                        {
+                                             var mess = new MessageDialog("dss" + "\n" + ex.Message.ToString() + "\n" + ex.ToString());
+                                             mess.ShowAsync();// КолПакетовОчер++;
+                                        });
                                     }
 
                                     ObrD = null;
@@ -326,10 +367,10 @@ namespace DataYRAN
                                         int t = 0;
                                         string[] strTime = time1.Split('.');
                                         await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,
-            () =>
-            {
-                t = Convert.ToInt32(TimeCorect.Text);
-            });
+                                        () =>
+                                        {
+                                          t = Convert.ToInt32(TimeCorect.Text);
+                                        });
                                         time1 = strTime[0] + "." + strTime[1] + "." + (Convert.ToInt32(strTime[2]) + t).ToString() + "." + strTime[3] + "." + strTime[4] + "." + strTime[5] + "." + strTime[6];
 
                                         await ObrSigData(ObrD.НулеваяЛиния, ObrD.NameFile, ObrD.NameBaaR12.ToString(), data1, time1, ObrD.tipName, classUserSetUp);
@@ -337,11 +378,11 @@ namespace DataYRAN
                                     catch (Exception ex)
                                     {
                                         await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,
-            () =>
-            {
-                var mess = new MessageDialog("dss" + "\n" + ex.Message.ToString() + "\n" + ex.ToString());
-                mess.ShowAsync();// КолПакетовОчер++;
-            });
+                                        () =>
+                                        {
+                                            var mess = new MessageDialog("dss" + "\n" + ex.Message.ToString() + "\n" + ex.ToString());
+                                            mess.ShowAsync();// КолПакетовОчер++;
+                                        });
                                     }
 
                                     ObrD = null;
@@ -355,17 +396,22 @@ namespace DataYRAN
                     
                         break;
                         }
-
-
-
                     }
-
-                
-
-            
-          
         }
 
+        /// <summary>
+        /// Обработка события с хвостом
+        /// </summary>
+        /// <param name="nameFile"></param>
+        /// <param name="nemeBAAK"></param>
+        /// <param name="data1"></param>
+        /// <param name="dataTail1"></param>
+        /// <param name="time1"></param>
+        /// <param name="tipN"></param>
+        /// <param name="classUserSetUp"></param>
+        /// <param name="dataTimeUR"></param>
+        /// <param name="script"></param>
+        /// <returns></returns>
         public async Task ObrSigData(string nameFile, string nemeBAAK,   int[,] data1, int[,] dataTail1, string time1, string tipN, ClassUserSetUp classUserSetUp, DataTimeUR dataTimeUR, string script)
         {
           
@@ -376,12 +422,7 @@ namespace DataYRAN
             bool bad = false;
             int[] timeS = new int[12];
             List<ClassSobNeutron> cll = new List<ClassSobNeutron>();
-
-
-
-         
             ParserBAAK12.ParseBinFileBAAK12.MaxAmpAndNul(data1, ref sig, ref Amp, ref Nul, ref bad, ClassUserSetUp.ObrNoise, ClassUserSetUp.KoefNoise, classUserSetUp.PorogS);
-        
             if (!bad)
                 {
                 Stopwatch watch = Stopwatch.StartNew();
@@ -443,9 +484,7 @@ namespace DataYRAN
              nameBAAK = nemeBAAK,
              time = dataTimeUR.TimeString(),
              mAmp=Amp,
-         dateUR=dataTimeUR,
-           
-            
+             dateUR=dataTimeUR,
              TimeS0 = timeS[0].ToString(),
              TimeS1 = timeS[1].ToString(),
              TimeS2 = timeS[2].ToString(),
@@ -683,50 +722,64 @@ namespace DataYRAN
             int[] Amp34 = new int[12];
             int[] Amp14 = new int[12];
             int d = 1;
+            int[] sumSig = new int[12];
+            int[] sumBB = new int[12];
             int[] firstTimeN = new int[12];
-
-
             try
             {
 
              
-
                 switch (tipN)
                 {
                     
                     case "N":
                         ParserBAAK12.ParseBinFileBAAK12.MaxAmpAndNul(data1, ref sig, ref Amp, ref Nul, ref bad, ClassUserSetUp.ObrNoise, ClassUserSetUp.KoefNoise, classUserSetUp.PorogS);
-
                         for (int i = 0; i < 12; i++)
                         {
-
-
                             for (int j = 0; j < 1024; j++)
                             {
                                 data1S[i, j] = Convert.ToDouble(data1[i, j]) - Nul[i];
                             }
-
-
                         }
-
                         ParserBAAK12.ParseBinFileBAAK12.SumSig(data1S, out sumDetQ);
                         break;
                     case "V":
-
+                      //  Debug.WriteLine("Es0");
                         ParserBAAK12.ParseBinFileBAAK12.MaxAmpAndNul(data1, ref sig, ref Amp, ref Nul, ref bad, ClassUserSetUp.ObrNoise, ClassUserSetUp.KoefNoise, classUserSetUp.PorogS);
+                       // Debug.WriteLine("Es1");
                         ObrabotcaURAN.Obrabotca.AmpAndTime(data1, Nul, out maxTime, out maxAmp);
+                       // Debug.WriteLine("Es2");
                         bool dN = ObrabotcaURAN.Obrabotca.Dneutron(maxAmp, classUserSetUp.PorogSN, out d);
+                      //  Debug.WriteLine("Es3");
                         firstTimeN = ObrabotcaURAN.Obrabotca.FirstTme(maxTime, maxAmp, classUserSetUp.PorogS, data1, Nul, ref PolovmaxTime, out Amp34, out Amp14);
-                        // var mess = new MessageDialog("dss" + "\n" + PolovmaxTime[0]);
-                        //  await mess.ShowAsync();// КолПакетовОчер++;
+                        sumSig = ColSigVatias(data1, Nul);
+                       sumBB= ColBin(data1, Nul);
+
+                        for (int i = 0; i < 12; i++)
+                        {
+                            int x = 0;
+                            for (int j = 350; j < 1024; j++)
+                            {
+                                // Debug.WriteLine(data1[i, j].ToString());
+                                //Debug.WriteLine(data1[i, j].ToString() +"-"+ Nul[i].ToString());
+                                // data1S[i, j] = Convert.ToDouble(data1[i, j]) - Nul[i];
+                                int AN = data1[i, j] - Convert.ToInt32(Nul[i]);
+                                if (AN > 5)
+                                {
+                                    sumDetQ[i] += AN;
+                                }
+
+                            }
+                            
+                        }
+                      //  ParserBAAK12.ParseBinFileBAAK12.SumSig(data1S, out sumDetQ);
+                      // Debug.WriteLine(sumDetQ[0].ToString());
                         break;
                     default:
 
                         break;
                 }
 
-
-              
                 timeS = ParserBAAK12.ParseBinFileBAAK12.TimeS(data1, classUserSetUp.PorogS, Amp, Nul);
             }
 
@@ -839,6 +892,7 @@ namespace DataYRAN
                                     sig = sig[i], 
                                     Amp34= Convert.ToInt16(Amp34[i]),
                                     Amp14= Convert.ToInt16(Amp14[i])
+                                  
                                 });
                             }
 
@@ -849,7 +903,7 @@ namespace DataYRAN
 
             ViewModel.ClassSobsV.Add(new ClassSobV()
             {
-               chNeutrons= chNeutrons,
+                chNeutrons = chNeutrons,
                 nameFile = nameFile,
                 nameklaster = array[0],
                 nameBAAK = nemeBAAK,
@@ -897,11 +951,25 @@ namespace DataYRAN
                 AmpNV = maxAmp[d - 1],
                 nV = d,
                 FirstTimeV = firstTimeN,
-                MaxTime = maxTime[d - 1]
+                MaxTime = maxTime[d - 1],
+                QS0 = sumDetQ[0],
+                QS1 = sumDetQ[1],
+                QS2 = sumDetQ[2],
+                QS3 = sumDetQ[3],
+                QS4 = sumDetQ[4],
+                QS5 = sumDetQ[5],
+                QS6 = sumDetQ[6],
+                QS7 = sumDetQ[7],
+                QS8 = sumDetQ[8],
+                QS9 = sumDetQ[9],
+                QS10 = sumDetQ[10],
+                QS11 = sumDetQ[11],
+                sumsig = sumSig,
+                sumBin = sumBB
 
 
 
-            });
+            }) ;
             ViewModel.CountObrabSob++;
 
         });
@@ -1041,7 +1109,19 @@ namespace DataYRAN
                             AmpNV = maxAmp[d],
                             nV = d,
                             FirstTimeV = firstTimeN,
-                            MaxTime = maxTime[d]
+                            MaxTime = maxTime[d],
+                            QS0 = sumDetQ[0],
+                            QS1 = sumDetQ[1],
+                            QS2 = sumDetQ[2],
+                            QS3 = sumDetQ[3],
+                            QS4 = sumDetQ[4],
+                            QS5 = sumDetQ[5],
+                            QS6 = sumDetQ[6],
+                            QS7 = sumDetQ[7],
+                            QS8 = sumDetQ[8],
+                            QS9 = sumDetQ[9],
+                            QS10 = sumDetQ[10],
+                            QS11 = sumDetQ[11]
 
 
 
