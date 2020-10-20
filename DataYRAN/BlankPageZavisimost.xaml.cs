@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.Toolkit.Uwp;
+using ObrabotcaURAN;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -609,6 +610,12 @@ namespace DataYRAN
             MessageDialog gh = new MessageDialog("Конец");
             await gh.ShowAsync();
 
+        }
+
+        private async void dataGrid3_Sorting(object sender, Microsoft.Toolkit.Uwp.UI.Controls.DataGridColumnEventArgs e)
+        {
+            MessageDialog messageDialog = new MessageDialog("fff");
+            await messageDialog.ShowAsync();
         }
     }
 }

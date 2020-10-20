@@ -49,6 +49,13 @@ using Windows.Devices.Usb;
 using Telerik.Core.Data;
 using DataYRAN.StatObrabotka.statObcTempSovpadenia;
 using DataYRAN.Pasport;
+using MongoDB.Driver;
+using MongoDB.Bson;
+using ObrabotcaURAN;
+using System.Reflection.PortableExecutable;
+using System.Runtime.InteropServices;
+using System.Security;
+using System.Collections;
 
 
 
@@ -278,7 +285,9 @@ namespace DataYRAN
                     }
                     FirstDiagnosticFile(l);
                             ViewModel.CountNaObrabZ = 0;
-                        if(turbo.IsOn==true)
+                         ClassUserSetUp.PorogN = Convert.ToInt32(TextBloxPorogN.Text);
+                         ClassUserSetUp.DlitN3 = Convert.ToInt32(TextBloxDlitN.Text);
+                        if (turbo.IsOn==true)
                         {
                             Task.Run(() => ZapicOcheredNaObrabotkyAsync("У1", 1, "1", l, cancellationToken, true));
                         }
@@ -505,25 +514,20 @@ namespace DataYRAN
         {
             try
             {
-                var picker = new Windows.Storage.Pickers.FileOpenPicker();
-                picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
-                picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
-                picker.FileTypeFilter.Add(".db");
-                picker.FileTypeFilter.Add(".DB");
-                picker.FileTypeFilter.Add(".db3");
+                string dirName = @"C:\\";
+                string info=String.Empty;
+                NetworkBrowser networkBrowser = new NetworkBrowser();
+             
+                var dd = networkBrowser.getNetworkComputers();
+                
+                info += "Количество ПК " + dd.Count.ToString() + "\n";
+                foreach (var e1 in dd)
+                {
+                    info += e1 + "\n";
+                }
 
-                Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
-                if (file != null)
-                {
-                    BDWork.BDAcces.Path = file.Path;
-                    BDWork.BDAcces.GetDataSob(String.Empty, ViewModel.classSobs);
-                  
-                    await new MessageDialog("End").ShowAsync();
-                }
-                else
-                {
-                   
-                }
+                MessageDialog messageDialog = new MessageDialog(info);
+                await messageDialog.ShowAsync();
             }
             catch(Exception ex)
             {
@@ -533,6 +537,171 @@ namespace DataYRAN
 
 
 
+        }
+        public sealed class NetworkBrowser
+        {
+            #region Dll Imports
+
+            //declare the Netapi32 : NetServerEnum method import
+            [DllImport("Netapi32", CharSet = CharSet.Unicode,
+            SetLastError = true),
+            SuppressUnmanagedCodeSecurityAttribute]
+
+            /// <summary>
+            /// Netapi32.dll : The NetServerEnum function lists all servers
+            /// of the specified type that are
+            /// visible in a domain. For example, an 
+            /// application can call NetServerEnum
+            /// to list all domain controllers only
+            /// or all SQL servers only.
+            /// You can combine bit masks to list
+            /// several types. For example, a value 
+            /// of 0x00000003  combines the bit
+            /// masks for SV_TYPE_WORKSTATION 
+            /// (0x00000001) and SV_TYPE_SERVER (0x00000002)
+            /// </summary>
+            public static extern int NetServerEnum(
+                string ServerNane, // must be null
+                int dwLevel,
+                ref IntPtr pBuf,
+                int dwPrefMaxLen,
+                out int dwEntriesRead,
+                out int dwTotalEntries,
+                int dwServerType,
+                string domain, // null for login domain
+                out int dwResumeHandle
+                );
+
+            //declare the Netapi32 : NetApiBufferFree method import
+            [DllImport("Netapi32", SetLastError = true),
+            SuppressUnmanagedCodeSecurityAttribute]
+
+            /// <summary>
+            /// Netapi32.dll : The NetApiBufferFree function frees 
+            /// the memory that the NetApiBufferAllocate function allocates. 
+            /// Call NetApiBufferFree to free
+            /// the memory that other network 
+            /// management functions return.
+            /// </summary>
+            public static extern int NetApiBufferFree(
+                IntPtr pBuf);
+
+            //create a _SERVER_INFO_100 STRUCTURE
+            [StructLayout(LayoutKind.Sequential)]
+            public struct _SERVER_INFO_100
+            {
+                internal int sv100_platform_id;
+                [MarshalAs(UnmanagedType.LPWStr)]
+                internal string sv100_name;
+            }
+            #endregion
+            #region Public Constructor
+            /// <SUMMARY>
+            /// Constructor, simply creates a new NetworkBrowser object
+            /// </SUMMARY>
+            public NetworkBrowser()
+            {
+
+            }
+            #endregion
+            #region Public Methods
+            /// <summary>
+            /// Uses the DllImport : NetServerEnum
+            /// with all its required parameters
+            /// (see http://msdn.microsoft.com/library/default.asp?
+            ///      url=/library/en-us/netmgmt/netmgmt/netserverenum.asp
+            /// for full details or method signature) to
+            /// retrieve a list of domain SV_TYPE_WORKSTATION
+            /// and SV_TYPE_SERVER PC's
+            /// </summary>
+            /// <returns>Arraylist that represents
+            /// all the SV_TYPE_WORKSTATION and SV_TYPE_SERVER
+            /// PC's in the Domain</returns>
+            public ArrayList getNetworkComputers()
+            {
+                //local fields
+                ArrayList networkComputers = new ArrayList();
+                const int MAX_PREFERRED_LENGTH = -1;
+                int SV_TYPE_WORKSTATION = 1;
+                int SV_TYPE_SERVER = 2;
+                IntPtr buffer = IntPtr.Zero;
+                IntPtr tmpBuffer = IntPtr.Zero;
+                int entriesRead = 0;
+                int totalEntries = 0;
+                int resHandle = 0;
+                int sizeofINFO = Marshal.SizeOf(typeof(_SERVER_INFO_100));
+
+
+                try
+                {
+                    //call the DllImport : NetServerEnum 
+                    //with all its required parameters
+                    //see http://msdn.microsoft.com/library/
+                    //default.asp?url=/library/en-us/netmgmt/netmgmt/netserverenum.asp
+                    //for full details of method signature
+                    int ret = NetServerEnum(null, 100, ref buffer,
+                        MAX_PREFERRED_LENGTH,
+                        out entriesRead,
+                        out totalEntries, SV_TYPE_WORKSTATION |
+                        SV_TYPE_SERVER, null, out
+                        resHandle);
+                    //if the returned with a NERR_Success 
+                    //(C++ term), =0 for C#
+                    if (ret == 0)
+                    {
+                        //loop through all SV_TYPE_WORKSTATION 
+                        //and SV_TYPE_SERVER PC's
+                        for (int i = 0; i < totalEntries; i++)
+                        {
+                            //get pointer to, Pointer to the 
+                            //buffer that received the data from
+                            //the call to NetServerEnum. 
+                            //Must ensure to use correct size of 
+                            //STRUCTURE to ensure correct 
+                            //location in memory is pointed to
+                            tmpBuffer = new IntPtr((int)buffer +
+                                       (i * sizeofINFO));
+                            //Have now got a pointer to the list 
+                            //of SV_TYPE_WORKSTATION and 
+                            //SV_TYPE_SERVER PC's, which is unmanaged memory
+                            //Needs to Marshal data from an 
+                            //unmanaged block of memory to a 
+                            //managed object, again using 
+                            //STRUCTURE to ensure the correct data
+                            //is marshalled 
+                            _SERVER_INFO_100 svrInfo = (_SERVER_INFO_100)
+                                Marshal.PtrToStructure(tmpBuffer,
+                                        typeof(_SERVER_INFO_100));
+
+                            //add the PC names to the ArrayList
+                            networkComputers.Add(svrInfo.sv100_name);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Problem with acessing " +
+                        "network computers in NetworkBrowser " +
+                        "\r\n\r\n\r\n" + ex.Message);
+                    //  MessageBox.Show("Problem with acessing " +
+                    // "network computers in NetworkBrowser " +
+                    //  "\r\n\r\n\r\n" + ex.Message,
+                    //  "Error", MessageBoxButtons.OK,
+                    //  MessageBoxIcon.Error);
+                    return null;
+                }
+                finally
+                {
+                    //The NetApiBufferFree function frees 
+                    //the memory that the 
+                    //NetApiBufferAllocate function allocates
+                    NetApiBufferFree(buffer);
+                }
+                //return entries found
+                return networkComputers;
+
+            }
+            #endregion
         }
         private async void ButtonScript_Click(object sender, RoutedEventArgs e)
         {
@@ -822,10 +991,138 @@ namespace DataYRAN
             var mess = new MessageDialog("Сохранение завершено");
             await mess.ShowAsync();
         }
-  
-      
-   
-        private void AppBarButton_Clear(object sender, RoutedEventArgs e)
+         public async void SaveOb()
+        {
+            var folderPicker = new Windows.Storage.Pickers.FolderPicker();
+            folderPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop;
+            folderPicker.FileTypeFilter.Add("*");
+
+            Windows.Storage.StorageFolder folder = await folderPicker.PickSingleFolderAsync();
+            if (folder != null)
+            {
+                // Application now has read/write access to all contents in the picked folder
+                // (including other sub-folder contents)
+                Windows.Storage.AccessCache.StorageApplicationPermissions.
+                FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+
+                StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+
+                int i = 0;
+                IDataView currentView = this.DataGrid1.GetDataView();
+                if (currentView.Items.Count > 0)
+                {
+
+
+                    // ObservableCollection<ClassSobColl> classSobs = new ObservableCollection<ClassSobColl>();
+                    using (StreamWriter writer =
+              new StreamWriter(await folder.OpenStreamForWriteAsync(
+              "ОбщиеСоб.txt", CreationCollisionOption.OpenIfExists)))
+                    {
+                       // string sSob = "id"; //yyyy-mm-dd_ue_hh:mm:ss.mms.mks.nns фильтр четырех кластеров
+
+
+                       // await writer.WriteLineAsync(sSob);
+                        foreach (ClassSobColl classSob in currentView)
+                        {
+                           
+
+
+                                string Sob = classSob.GetID();
+                                await writer.WriteLineAsync(Sob);
+                            
+                        }
+
+
+                    }
+                }
+
+            }
+            else
+            {
+
+            }
+
+            var mess = new MessageDialog("Сохранение завершено");
+            await mess.ShowAsync();
+
+        }
+        private async void AppBarButton_Save1(object sender, RoutedEventArgs e)
+        {
+            SaveOb();
+
+        }
+        private async void AppBarButton_SaveMongoDB(object sender, RoutedEventArgs e)
+        {
+            IDataView currentView = this.DataGrid1.GetDataView();
+            if (currentView.Items.Count > 0)
+            {
+
+
+                var client = new MongoClient("mongodb://192.168.1.78:27017");
+                IMongoDatabase database = client.GetDatabase("EVENTS_URAN");
+                foreach (ClassSobColl classSob in currentView)
+                {
+                    try
+                    {
+
+
+                        IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(classSob.dateUR.GG.ToString("0000") + "-" + classSob.dateUR.MM.ToString("00") + "-" + classSob.dateUR.DD.ToString("00")
+                                        + "_events");
+                        BsonArray sAr = new BsonArray();
+                        BsonArray klAr = new BsonArray();
+                        foreach (var df in classSob.col)
+                        {
+                            sAr.Add(df.dateUR.GG.ToString("0000") + "-" + df.dateUR.MM.ToString("00") + "-" + df.dateUR.DD.ToString("00") + "_" + df.nameklaster +"_"+
+                                df.dateUR.HH.ToString("00") + ":" + df.dateUR.Min.ToString("00") + ":" + df.dateUR.CC.ToString("00")
+                                         + "." + df.dateUR.Mil.ToString("000") + "." + df.dateUR.ML.ToString("000") + "." + df.dateUR.NN.ToString("000"));
+                            klAr.Add(Convert.ToInt32(df.nameklaster));
+                        }
+                        BsonDocument person1 = new BsonDocument
+                    {
+                        {"_id", classSob.GetID()},
+                        {"mask", classSob.GetMask},
+                        {"eas_event_time_ns", classSob.dateUR.GetTimeNS},
+                        {"list_of_ids", sAr},
+                        {"list_of_cluster_numbers", klAr},
+                        {"multiplicity", classSob.col.Count}
+
+                        };
+                        Debug.WriteLine(classSob.GetID());
+                        try
+                        {
+
+
+                            await collection.InsertOneAsync(person1);
+                        }
+                        catch(Exception ex)
+                        {
+                            Debug.WriteLine(classSob.GetID()+"\t"+"Error");
+                            var result = await  collection.ReplaceOneAsync(new BsonDocument("_id", classSob.GetID()), person1);
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                       // MessageDialog messageDialog = new MessageDialog(ex.ToString());
+                       // await messageDialog.ShowAsync();
+                            
+                    }
+                }
+                MessageDialog messageDialog1 = new MessageDialog("In The End");
+                await messageDialog1.ShowAsync();
+            }
+            MessageDialog messageDialog2 = new MessageDialog("The End");
+            await messageDialog2.ShowAsync();
+        }
+        private async void AppBarButton_SavB(object sender, RoutedEventArgs e)
+        {
+            string nemaska = "100";
+           int d= Convert.ToInt32(nemaska, 2);
+            MessageDialog messageDialog2 = new MessageDialog(d.ToString());
+            await messageDialog2.ShowAsync();
+        }
+
+            //  {"Languages", new BsonArray{"english", "german"}}
+            private void AppBarButton_Clear(object sender, RoutedEventArgs e)
         {
             ViewModel._DataColecSobCopy.Clear();
             ViewModel._DataSobColli.Clear();
@@ -2207,7 +2504,7 @@ textOb.Text = listC.Count().ToString();
                 {
                     Title = "События в таблице",
                     Content = "в таблице уже есть события, желаете их оставить?",
-                    PrimaryButtonText = "Оставитьe",
+                    PrimaryButtonText = "Оставить",
                     CloseButtonText = "Удалить"
                 };
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,6 +82,15 @@ namespace DataYRAN
                 return ki;
             }
         }
+        public Int64 GetTimeNS
+        {
+            get
+            {
+
+
+               return dateUR.GetTimeNS;
+            }
+        }
         public int NDn
         {
 
@@ -142,6 +152,45 @@ namespace DataYRAN
                 return x;
             }
         }
+        public string GetID()
+        {
+            
+
+
+                return dateUR.GG.ToString("0000") + "-" + dateUR.MM.ToString("00") + "-" + dateUR.DD.ToString("00")
+                                         + "_ue_" + dateUR.HH.ToString("00") + ":" + dateUR.Min.ToString("00") + ":" + dateUR.CC.ToString("00")
+                                         + "." + dateUR.Mil.ToString("000") + "." + dateUR.ML.ToString("000") + "." + dateUR.NN.ToString("000");
+            
+        }
+        public int GetMask
+        {
+            get
+            {
+
+
+                string nemaska = String.Empty;
+
+                for (int i = 5; i >= 0; i--)
+                {
+
+
+                    var coll = (from f in col where f.nameklaster == Convert.ToString(i + 1) select f).ToList();
+                    Debug.WriteLine(i + "\t" + coll.Count());
+                    if (coll.Count > 0)
+                    {
+                        nemaska += "1";
+                    }
+                    else
+                    {
+                        nemaska += "0";
+                    }
+                }
+
+                return Convert.ToInt32(nemaska, 2);
+            }
+            
+        }
+       
 
     }
 }

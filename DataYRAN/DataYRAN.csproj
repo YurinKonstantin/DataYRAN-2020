@@ -19,7 +19,8 @@
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <GenerateAppInstallerFile>True</GenerateAppInstallerFile>
-    <PackageCertificateThumbprint>0441A3FC02364103B1DDF9D16C455CA72A3CA118</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>
+    </PackageCertificateThumbprint>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxPackageDir>\\Uran\uran data\SetAppURAN\DataURAN</AppxPackageDir>
@@ -28,6 +29,7 @@
     <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
     <AppInstallerUri>\\Uran\uran data\SetAppURAN\DataURAN</AppInstallerUri>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+    <PackageCertificateKeyFile>DataYRAN_TemporaryKey.pfx</PackageCertificateKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -109,6 +111,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -121,6 +124,7 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
@@ -165,7 +169,6 @@
     <Compile Include="ClassSob12d7d.cs" />
     <Compile Include="ClassSobColl.cs" />
     <Compile Include="ClassSobN.cs" />
-    <Compile Include="ClassSobNeutron.cs" />
     <Compile Include="ClassSobObrZav.cs" />
     <Compile Include="ClassSobV.cs" />
     <Compile Include="ClassTabs.cs" />
@@ -228,6 +231,7 @@
     <Compile Include="StatObrabotka\TimeDistribuchen\ClassTD.cs" />
     <Compile Include="StatObrabotka\TimeDistribuchen\PageTimeDistrib.xaml.cs" />
     <Compile Include="TelerikStringLoader.cs" />
+    <Compile Include="tipBAAK.cs" />
     <Compile Include="ViewShovMaps.cs" />
     <Compile Include="ОбработкаСобытийИзОчереди.cs" />
     <Compile Include="РаботаФайлами.cs" />
@@ -398,35 +402,38 @@
       <Version>2.6.1003.1</Version>
     </PackageReference>
     <PackageReference Include="IronPython">
-      <Version>2.7.10-candidate1</Version>
+      <Version>2.7.10</Version>
     </PackageReference>
     <PackageReference Include="LiveCharts.Uwp">
       <Version>0.8.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
-      <Version>2.9.8</Version>
+      <Version>3.3.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeQuality.Analyzers">
-      <Version>2.9.8</Version>
+      <Version>3.3.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Data.Sqlite">
-      <Version>3.1.1</Version>
+      <Version>5.0.0-preview.2.20120.8</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.9</Version>
+      <Version>6.2.10</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
-      <Version>6.0.0</Version>
+      <Version>6.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
-      <Version>6.0.0</Version>
+      <Version>6.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls.DataGrid">
-      <Version>6.0.0</Version>
+      <Version>6.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="MongoDB.Driver">
+      <Version>2.11.0</Version>
     </PackageReference>
     <PackageReference Include="OxyPlot.Windows">
       <Version>1.0.0</Version>
@@ -435,7 +442,7 @@
       <Version>1.0.0</Version>
     </PackageReference>
     <PackageReference Include="Telerik.UI.for.UniversalWindowsPlatform">
-      <Version>1.0.1.8</Version>
+      <Version>1.0.1.9</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -443,7 +450,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Project\WPF\ClassLibraryParserDataBAAK12-200\ClassLibrary3\bin\Release\ClassLibrary5.dll</HintPath>
     </Reference>
-    <Reference Include="ObrabotcaURAN">
+    <Reference Include="ObrabotcaURAN, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\ObrabotcaURAN\ObrabotcaURAN\bin\Release\netstandard2.0\ObrabotcaURAN.dll</HintPath>
     </Reference>
   </ItemGroup>

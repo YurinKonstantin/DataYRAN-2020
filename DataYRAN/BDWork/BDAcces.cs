@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using ObrabotcaURAN;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -51,13 +52,15 @@ namespace DataYRAN.BDWork
        public async  static Task<List<ClassSob>> GetDataSob(string uslovie, ObservableCollection<ClassSob> classSobs)
         {
             List<ClassSob> entries = new List<ClassSob>();
-
+            Debug.Write("Start"+"\n"+ Path);
             using (SqliteConnection db = new SqliteConnection($"Filename={Path}"))
             {
-                db.Open();
+                Debug.Write("OpenStart"+"\n");
+             await  db.OpenAsync();
+                Debug.Write("OpenStartES");
                 SqliteCommand selectCommand = new SqliteCommand("SELECT * from События" + uslovie, db);
                 SqliteDataReader query = selectCommand.ExecuteReader();
-              
+                Debug.Write("ReadStart");
                 while (query.Read())
                 {
                     List<ClassSobNeutron> cll = new List<ClassSobNeutron>();
@@ -66,11 +69,11 @@ namespace DataYRAN.BDWork
                     {
                         masAmp[i - 7] = query.GetInt32(i);
                     }
-                    int[] masN = new int[12];
+                    int[] masN = new int[12]; 
                     for (int i = 19; i < 31; i++)
                     {
                         masN[i - 19] = query.GetInt32(i);
-                       // Debug.WriteLine(query.GetInt32(i).ToString());
+                        Debug.WriteLine(query.GetInt32(i).ToString());
                     }
                     int[] masNull = new int[12];
                     for (int i = 31; i < 43; i++)
@@ -89,7 +92,8 @@ namespace DataYRAN.BDWork
                         }
                         catch (Exception ex)
                         {
-                         //   await new MessageDialog(ex.ToString() + i.ToString() + "\t" + query.GetString(i) + "\t" + query.GetString(i).Replace(",", ".")).ShowAsync();
+                            Debug.Write("ReadError");
+                            //   await new MessageDialog(ex.ToString() + i.ToString() + "\t" + query.GetString(i) + "\t" + query.GetString(i).Replace(",", ".")).ShowAsync();
                         }
                     }
                     int badint = query.GetInt32(55);
@@ -215,19 +219,20 @@ namespace DataYRAN.BDWork
             return entries;
         }
 
-       /* public static List<ClassTablSob> GetDataSob(string uslovie)
+        public static List<ClassTablSob> GetDataSob(string uslovie)
         {
             List<ClassTablSob> entries = new List<ClassTablSob>();
 
-            SQLiteConnection db =
-                new SQLiteConnection("Data Source = " + Path, true);
+            SqliteConnection db =
+                new SqliteConnection("Data Source = " + Path);
+           
 
             db.Open();
 
-            SQLiteCommand selectCommand = new SQLiteCommand
-                ("SELECT * from События where " + uslovie, db);
+            SqliteCommand selectCommand = new SqliteCommand
+                ("SELECT * from События", db);
 
-            SQLiteDataReader query = selectCommand.ExecuteReader();
+            SqliteDataReader query = selectCommand.ExecuteReader();
 
             while (query.Read())
             {
@@ -259,7 +264,7 @@ namespace DataYRAN.BDWork
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.ToString() + i.ToString() + "\t" + query.GetString(i) + "\t" + query.GetString(i).Replace(",", "."));
+                        //MessageBox.Show(ex.ToString() + i.ToString() + "\t" + query.GetString(i) + "\t" + query.GetString(i).Replace(",", "."));
                     }
                 }
                 int badint = query.GetInt32(55);
@@ -298,7 +303,7 @@ namespace DataYRAN.BDWork
 
 
             return entries;
-        }*/
+        }
        
     }
     public class ClassTablRun

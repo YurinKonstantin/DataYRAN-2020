@@ -117,21 +117,19 @@ namespace DataYRAN.Pasport
             if (classSobs.Count > 0)
             {
                 var nameK = from nn in classSobs orderby nn.nameklaster select Convert.ToInt32(nn.nameklaster);
-                Debug.WriteLine("Kl " + nameK.Count().ToString());
-                Debug.WriteLine("Sortung");
+
                 var orderedNumbers = from ClassSob in classSobs
                                      orderby ClassSob.dateUR.DateTimeString()
                                      select ClassSob;
-                Debug.WriteLine("mintime");
+          
                 DateTime dateTime = new DateTime(orderedNumbers.ElementAt(0).dateUR.GG, orderedNumbers.ElementAt(0).dateUR.MM, orderedNumbers.ElementAt(0).dateUR.DD, 0, 0, 0, 0);
-                Debug.WriteLine(dateTime.ToString());
-                Debug.WriteLine("mintime");
+            
                 DateTime dateTimeFirst = new DateTime(orderedNumbers.ElementAt(0).dateUR.GG, orderedNumbers.ElementAt(0).dateUR.MM, orderedNumbers.ElementAt(0).dateUR.DD, 0, 0, 0, 0);
-                Debug.WriteLine(dateTimeFirst.ToString());
+            
                 DateTime dateTime1 = dateTime; //new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0, 0);
-                Debug.WriteLine("maxtime");
+         
                 DateTime dateTimeEnd = new DateTime(orderedNumbers.ElementAt(orderedNumbers.Count() - 1).dateUR.GG, orderedNumbers.ElementAt(orderedNumbers.Count() - 1).dateUR.MM, orderedNumbers.ElementAt(orderedNumbers.Count() - 1).dateUR.DD, 0, 0, 0, 0);
-                Debug.WriteLine(dateTimeEnd.ToString());
+              
                 int max = nameK.Max();
                 int min = nameK.Min();
                 for (int i = min; i <= max; i++)
@@ -143,7 +141,7 @@ namespace DataYRAN.Pasport
                     }
 
                 }
-                Debug.WriteLine("dd");
+      
                 for (DateTime i= dateTimeFirst; i.Month<= dateTimeEnd.Month; i= i.AddMonths(1))
                 {
                     if (i.Year > dateTimeFirst.Year)
@@ -153,16 +151,16 @@ namespace DataYRAN.Pasport
 
 
                      
-                        Debug.WriteLine(i.ToString());
+                    
                         var k = from f in orderedNumbers where f.dateUR.GG == i.Year && f.dateUR.MM == i.Month select f;
-                        Debug.WriteLine(k.Count().ToString());
+                  
                         if (k.Count() > 0)
                         {
                             mecdata.Add(k.First().dateUR.MM.ToString());
                         }
                     
                 }
-                Debug.WriteLine("pas");
+          
 
                 try
                 {
@@ -180,7 +178,7 @@ namespace DataYRAN.Pasport
                                     name = "Паспорт кластера " + kl.ToString() + " " + d.First().dateUR.MM.ToString() + "." + d.First().dateUR.GG.ToString(),
                                     classSobs = d.ToList<ClassSob>(),
                                 };
-                                Debug.WriteLine("Распределение амплитуд");
+                               
                                 await editor3.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => {
                                     editor3.Text = "Распределение амплитуд"; });
                                 classPasport.classRasAmp= await AmpRas(d.ToList());
@@ -416,7 +414,7 @@ namespace DataYRAN.Pasport
                 if (status != Windows.Storage.Provider.FileUpdateStatus.Complete)
                 {
                     Windows.UI.Popups.MessageDialog errorBox =
-                        new Windows.UI.Popups.MessageDialog("File " + file.Name + " couldn't be saved.");
+                    new Windows.UI.Popups.MessageDialog("File " + file.Name + " couldn't be saved.");
                     await errorBox.ShowAsync();
                 }
             }
@@ -442,9 +440,6 @@ namespace DataYRAN.Pasport
                  Windows.UI.Text.ITextCharacterFormat charFormatting = selectedText.CharacterFormat;
                  charFormatting.Italic = Windows.UI.Text.FormatEffect.Toggle;
                  selectedText.CharacterFormat = charFormatting;
-              
-              
-           
             }
         }
 

@@ -81,5 +81,15 @@ namespace DataYRAN
         {
             return GG.ToString("0000") + "." + MM.ToString("00") + "." + DD.ToString("00");
         }
+        public Int64 GetTimeNS
+        {
+                get
+                {
+              
+                
+
+                return Convert.ToInt64((HH * 3.6 * 1000000000000) + (Min * 60000000000) + (CC * 1000000000) + (Mil * 1000000) + (ML * 1000) + NN);
+                }
+        }
     }
 }
