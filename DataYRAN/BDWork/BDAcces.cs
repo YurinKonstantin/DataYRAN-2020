@@ -16,13 +16,14 @@ namespace DataYRAN.BDWork
 {
    public static class BDAcces
     {
-        public static string Path { get; set; }
+        
+      static  public List<string> Path { get; set; }
         //"SELECT НомерRun, Синхронизация, ОбщийПорог, Порог, Триггер, ЗначениеТаймера, ВремяЗапуска, ВремяСтоп  from Run"
-        public static List<ClassTablRun> GetDataRun()
+        public static List<ClassTablRun> GetDataRun(string path )
         {
             List<ClassTablRun> entries = new List<ClassTablRun>();
 
-            using (SqliteConnection db = new SqliteConnection($"Filename={Path}"))
+            using (SqliteConnection db = new SqliteConnection($"Filename={path}"))
             {
                 db.Open();
                 SqliteCommand selectCommand = new SqliteCommand("SELECT НомерRun, Синхронизация, ОбщийПорог, Порог, Триггер, ЗначениеТаймера, ВремяЗапуска, ВремяСтоп  from Run", db);
@@ -49,11 +50,11 @@ namespace DataYRAN.BDWork
 
             return entries;
         }
-       public async  static Task<List<ClassSob>> GetDataSob(string uslovie, ObservableCollection<ClassSob> classSobs)
+       public async  static Task<List<ClassSob>> GetDataSob(string uslovie, ObservableCollection<ClassSob> classSobs, string path)
         {
             List<ClassSob> entries = new List<ClassSob>();
-            Debug.Write("Start"+"\n"+ Path);
-            using (SqliteConnection db = new SqliteConnection($"Filename={Path}"))
+            Debug.Write("Start"+"\n"+ path);
+            using (SqliteConnection db = new SqliteConnection($"Filename={path}"))
             {
                 Debug.Write("OpenStart"+"\n");
              await  db.OpenAsync();
@@ -219,12 +220,12 @@ namespace DataYRAN.BDWork
             return entries;
         }
 
-        public static List<ClassTablSob> GetDataSob(string uslovie)
+        public static List<ClassTablSob> GetDataSob(string uslovie, string path)
         {
             List<ClassTablSob> entries = new List<ClassTablSob>();
 
             SqliteConnection db =
-                new SqliteConnection("Data Source = " + Path);
+                new SqliteConnection("Data Source = " + path);
            
 
             db.Open();
@@ -304,7 +305,41 @@ namespace DataYRAN.BDWork
 
             return entries;
         }
-       
+        public static List<ClassTablFile> GetDataFile(string uslovie, string path)
+        {
+            List<ClassTablFile> entries = new List<ClassTablFile>();
+
+            SqliteConnection db =
+                new SqliteConnection("Data Source = " + path);
+
+
+            db.Open();
+
+            SqliteCommand selectCommand = new SqliteCommand("SELECT * from Файлы", db);
+
+            SqliteDataReader query = selectCommand.ExecuteReader();
+
+            while (query.Read())
+            {
+                var ff = new ClassTablFile() {
+                    ИмяФайла= query.GetString(1),
+                    Плата= query.GetString(2),
+                    TimeCrete= query.GetString(3),
+                    TimeClose= query.GetString(4),
+                    Run= query.GetString(5)
+
+                };
+
+
+                entries.Add(ff);
+            }
+
+            db.Close();
+
+
+            return entries;
+        }
+
     }
     public class ClassTablRun
     {
@@ -331,6 +366,19 @@ namespace DataYRAN.BDWork
         public int[] Nul { get; set; }
         public double[] sig { get; set; }
         public bool bad { get; set; }
+
+    }
+    public class ClassTablFile
+    {
+        /// <summary>
+        /// Поле Время
+        /// </summary>
+        public string TimeCrete { get; set; }
+        public string TimeClose { get; set; }
+        public string ИмяФайла { get; set; }
+        public string Плата { get; set; }
+        public string Run { get; set; }
+        
 
     }
 

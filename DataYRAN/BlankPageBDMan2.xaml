@@ -61,7 +61,25 @@
                     </StackPanel>
                 </ScrollViewer>
             </GridViewItem>
+            
         </GridView>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Right" Margin="20">
+            <TextBlock Text="Справка" FontSize="20"/>
+            <TextBlock Text="Загрузить все события из таблицы События"/>
+            <TextBlock Text="SELECT * from События"/>
+            <TextBlock/>
+            <TextBlock Text="Загрузить последние 100 событий из таблицы События"/>
+            <TextBlock Text="SELECT * from События order by Primary_Key desc limit 100"/>
+            <TextBlock/>
+            <TextBlock Text="Загрузить все событии из таблицы События 1 кластера"/>
+            <TextBlock Text="SELECT * from События where Кластер = '1'"/>
+            <TextBlock/>
+            <TextBlock Text="Загрузить события сентября 2020 из таблицы События"/>
+            <TextBlock Text="SELECT * from События where ИмяФайла Like '%09.2020%'"/>
+            <TextBlock/>
+            <TextBlock Text="Загрузить события 1 кластера сентября 2020 из таблицы События"/>
+            <TextBlock Text="SELECT * from События where Кластер = '1' and ИмяФайла Like '%09.2020%'"/>
+        </StackPanel>
         <StackPanel Grid.Row="2">
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="24">
                 
@@ -100,7 +118,7 @@
             </StackPanel>
             <StackPanel Margin="24">
                 <TextBlock Text="sql запрос"/>
-                <TextBox x:Name="textSql" Text="select * from [Событие] order by Код desc"/>
+                <TextBox x:Name="textSql" Text="SELECT * from События "/>
                 <Button Content="Применить" Click="Button_Click_1"/>
             </StackPanel>
         </StackPanel>

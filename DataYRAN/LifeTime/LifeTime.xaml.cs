@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -17,6 +18,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.Data.Sqlite;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -73,36 +75,74 @@ namespace DataYRAN.LIfeTime
             picker.FileTypeFilter.Add(".txt");
             picker.FileTypeFilter.Add(".dat");
             picker.FileTypeFilter.Add(".rtf");
+            picker.FileTypeFilter.Add(".db");
 
             Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
             if (file != null)
             {
                 // Application now has read/write access to the picked file
                 this.nameFile.Text = "Имя файла: " + file.Name;
+                Debug.WriteLine(file.FileType);
                 char[] rowSplitter = { '\r', '\n' };
-                
-                string[] text = (await Windows.Storage.FileIO.ReadTextAsync(file)).Split(rowSplitter, StringSplitOptions.RemoveEmptyEntries);
-                for(int i=0; i<text.Length; i++)
+                if (file.FileType != ".db")
                 {
-                    string[] text1 = text[i].Split('\t');
-                    try
+
+
+                    string[] text = (await Windows.Storage.FileIO.ReadTextAsync(file)).Split(rowSplitter, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < text.Length; i++)
                     {
-
-
-                        if (text1[3] == String.Empty || text1[3] == null || text1[4] == String.Empty || text1[4] == null || text1[1].Split('_')[1] == "Test")
+                        string[] text1 = text[i].Split('\t');
+                        try
                         {
 
+
+                            if (text1[3] == String.Empty || text1[3] == null || text1[4] == String.Empty || text1[4] == null || text1[1].Split('_')[1] == "Test")
+                            {
+
+                            }
+                            else
+                            {
+                                DataColecF.Add(new ClassFileLT() { nomer = Convert.ToInt32(text1[0]), nameFile = text1[1], TimeOpen = text1[3], TimeClose = text1[4], nameRun = text1[5] });
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            DataColecF.Add(new ClassFileLT() { nomer = Convert.ToInt32(text1[0]), nameFile = text1[1], TimeOpen = text1[3], TimeClose = text1[4], nameRun = text1[5] });
+                            MessageDialog messageDialog = new MessageDialog(ex.ToString());
+                            await messageDialog.ShowAsync();
                         }
                     }
-                    catch(Exception ex)
+                }
+                else
+                {
+                    
+                    SqliteConnection db =
+               new SqliteConnection("Data Source = " + file.Path);
+
+
+                    db.Open();
+
+                    SqliteCommand selectCommand = new SqliteCommand("SELECT * from Файлы", db);
+
+                    SqliteDataReader query = selectCommand.ExecuteReader();
+
+                    while (query.Read())
                     {
-                        MessageDialog messageDialog = new MessageDialog(ex.ToString());
-                       await messageDialog.ShowAsync();
-                    }
+                        try
+                        {
+
+
+                            if (query.GetString(1).Split('_')[1] != "Test")
+                            {
+                                Debug.WriteLine(query.GetString(1));
+                                DataColecF.Add(new ClassFileLT() { nomer = Convert.ToInt32(query.GetString(0)), nameFile = query.GetString(1), TimeOpen = query.GetString(3), TimeClose = query.GetString(4), nameRun = query.GetString(5) });
+                            }
+                        }
+                        catch(Exception ex)
+                        {
+                            Debug.WriteLine(ex.ToString());                        }
+                        }
+
+                    db.Close();
                 }
               
 

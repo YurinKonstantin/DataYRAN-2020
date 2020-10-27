@@ -490,8 +490,8 @@ namespace DataYRAN
                             }
                             catch(Exception ex)
                             {
-                                MessageDialog messageDialog = new MessageDialog(ex.ToString()+"\n"+Sob);
-                                await messageDialog.ShowAsync();
+                               // MessageDialog messageDialog = new MessageDialog(ex.ToString()+"\n"+Sob);
+                             //   await messageDialog.ShowAsync();
                             }
                         }
                     }
@@ -500,8 +500,8 @@ namespace DataYRAN
             }
             catch(Exception ex)
             {
-                MessageDialog messageDialog = new MessageDialog(ex.ToString());
-                await messageDialog.ShowAsync();
+              //  MessageDialog messageDialog = new MessageDialog(ex.ToString());
+               // await messageDialog.ShowAsync();
             }
 
 

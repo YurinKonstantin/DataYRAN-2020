@@ -1064,7 +1064,7 @@ namespace DataYRAN.Pasport
 
                     List<Data> datas;
                 MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = AxisPosition.Bottom, MaximumPadding = 0.1, Maximum=110, MinimumPadding = 0.1, Title="A, код АЦП", AxislineThickness = 2, FontSize = 26, TitleFontSize=26, AxislineStyle = LineStyle.Solid, Minimum=1 });
-                  MyModel.Axes.Add(new OxyPlot.Axes.LogarithmicAxis { Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, Title= "N", AxislineThickness = 2, FontSize = 26, AxislineStyle = LineStyle.Solid, TitleFontSize = 26});
+                  MyModel.Axes.Add(new OxyPlot.Axes.LogarithmicAxis { Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, Title= "N", AxislineThickness = 2, FontSize = 26, AxislineStyle = LineStyle.Solid, TitleFontSize = 26, Minimum=0.003, Maximum=10});
                     for (int i = 0; i < 12; i++)
                     {
 

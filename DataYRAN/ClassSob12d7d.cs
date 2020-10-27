@@ -7,8 +7,16 @@ using System.Threading.Tasks;
 namespace DataYRAN
 {
    public class ClassSob12d7d
-   {
-       public string time { get; set; }
+    {
+        public DataTimeUR dateUR { get; set; }
+        public string DataTimeV
+        {
+            get
+            {
+                return dateUR.DateString();
+            }
+        }
+        public string time { get; set; }
         public int timeDalay { get; set; }
        public int[] Amp12d { get; set; }
         public int Amp12d1

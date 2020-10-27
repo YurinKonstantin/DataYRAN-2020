@@ -13,7 +13,7 @@
   <Identity
     Name="42ef5033-bcac-47f7-9a6c-8d8c7464861d"
     Publisher="CN=yurin"
-    Version="1.0.19.0" />
+    Version="1.0.22.0" />
 
   <mp:PhoneIdentity PhoneProductId="42ef5033-bcac-47f7-9a6c-8d8c7464861d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

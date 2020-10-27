@@ -40,6 +40,7 @@ namespace DataYRAN
             t.ForegroundColor = Colors.White;
             t.ButtonBackgroundColor = Colors.DodgerBlue;
             t.ButtonForegroundColor = Colors.White;
+            ApplicationView.GetForCurrentView().Title = "DataURAN - 22.10.2020";
         }
         private void NavView_Loaded(object sender, RoutedEventArgs e)
         {

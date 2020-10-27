@@ -36,6 +36,9 @@ namespace DataYRAN
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             ClassBDMan2.Path = Path.Text;
+            listsql1.Clear();
+            listsql1.Add(textSql.Text);
+            ClassBDMan2.listsql = listsql1;
             this.Frame.Navigate(typeof(BlankPageObrData), ClassBDMan2);
         }
    

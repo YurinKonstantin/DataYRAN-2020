@@ -905,7 +905,6 @@
                             </Pivot.RightHeader>
                             <Windows10version1809:PivotItem Header="События"  UseLayoutRounding="True" FontSize="14">
                                 <SplitView IsPaneOpen="False" DisplayMode="Inline"  OpenPaneLength="460" PanePlacement="Right" x:Name="Split1" UseLayoutRounding="True">
-
                                     <SplitView.Pane >
                                         <ScrollViewer>
                                             <Grid UseLayoutRounding="True">
@@ -1315,9 +1314,7 @@
                                         <telerikGrid:RadDataGrid ColumnDataOperationsMode="Inline" x:Name="DataGrid" RowHeight="36" Padding="0" RowDetailsDisplayMode="Single" ItemsSource="{x:Bind ViewModel.ClassSobsT}" IncrementalLoadingMode="Explicit" UseLayoutRounding="True"  AutoGenerateColumns="False" VerticalAlignment="Stretch" UserSortMode="Multiple" CanUserChooseColumns="True"  UserFilterMode="Enabled" SelectionMode="Single" SelectionChanged="DataGrid_SelectionChanged" Margin="0,0,0,0">
                                             <telerikGrid:RadDataGrid.RowDetailsTemplate>
                                                 <DataTemplate>
-                                                    <telerikGrid:RadDataGrid ItemsSource="{Binding classSobNeutronsList}"
-                              UserGroupMode="Disabled"
-                              AutoGenerateColumns="False" >
+                                                    <telerikGrid:RadDataGrid ItemsSource="{Binding classSobNeutronsList}" UserGroupMode="Disabled" AutoGenerateColumns="False" >
                                                         <telerikGrid:RadDataGrid.Columns >
                                                             <telerikGrid:DataGridTextColumn PropertyName="D"  Header="Детектор" Width="100" SizeMode="Fixed"/>
                                                             <telerikGrid:DataGridTextColumn PropertyName="Amp" Header="Амплитуда" Width="200" SizeMode="Fixed"/>
@@ -1390,6 +1387,7 @@
                                                 <telerikChart:LineSeries ItemsSource="{Binding}"/>
                                             </telerikChart:RadCartesianChart>
                                         </Grid>
+                                        
                                     </Grid>
                                 </SplitView>
                             </Windows10version1809:PivotItem>
@@ -3495,33 +3493,22 @@
 
                         </controls:TabView>
                     </PivotItem>
-                    <PivotItem Header="Невод-ШАЛ" FontSize="12" >
-
-                    </PivotItem>
-                    <PivotItem Header="УРАН+Невод-ШАЛ" FontSize="12" >
-
-                    </PivotItem>
                     <PivotItem Header="БААК12-200Т+200" FontSize="12" >
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
-
                             <CommandBar>
                                 <AppBarButton Content="Play" Click="AppBarButton_Play1"/>
                             </CommandBar>
-                           
-                                
-                                    
-                               
-                                <telerikGrid:RadDataGrid Grid.Row="1" x:Name="DataGrid12d7d"  ItemsSource="{x:Bind ViewModel.ClassSobs12d7d}" UseLayoutRounding="True"  AutoGenerateColumns="False" VerticalAlignment="Stretch" UserSortMode="Multiple" CanUserChooseColumns="True"  UserFilterMode="Enabled" SelectionMode="Single" SelectionChanged="DataGrid1_SelectionChanged" Margin="0,0,0,0">
-                                    <telerikGrid:RadDataGrid.Columns>
-
-                                        <telerikGrid:DataGridTextColumn PropertyName="time" Header="Время" />
-                                        <telerikGrid:DataGridTextColumn PropertyName="timeDalay" Header="Задержка" />
-
-                                        <telerikGrid:DataGridTextColumn PropertyName="Amp12d1" Header="12d амплитуда 1" />
+                            <telerikGrid:RadDataGrid Grid.Row="1" x:Name="DataGrid12d7d"  ItemsSource="{x:Bind ViewModel.ClassSobs12d7d}" UseLayoutRounding="True"  AutoGenerateColumns="False" VerticalAlignment="Stretch" UserSortMode="Multiple" CanUserChooseColumns="True"  UserFilterMode="Enabled" SelectionMode="Single" SelectionChanged="DataGrid1_SelectionChanged" Margin="0,0,0,0">
+                                <telerikGrid:RadDataGrid.Columns>
+                                    <telerikGrid:DataGridTextColumn PropertyName="DataTimeV" Header="Дата события" SizeMode="Fixed" Width="120"/>
+                                    <telerikGrid:DataGridTextColumn PropertyName="time" Header="Время" />
+                                    <telerikGrid:DataGridTextColumn PropertyName="timeDalay" Header="Задержка" />
+                                    <telerikGrid:DataGridTextColumn PropertyName="Amp12d1" Header="12d амплитуда 1" />
                                         <telerikGrid:DataGridTextColumn PropertyName="Amp7d1" Header="7d амплитуда 1" />
                                         <telerikGrid:DataGridTextColumn PropertyName="Amp12d2" Header="12d амплитуда 2" />
                                         <telerikGrid:DataGridTextColumn PropertyName="Amp7d2" Header="7d амплитуда 2" />
@@ -3544,14 +3531,10 @@
                                         <telerikGrid:DataGridTextColumn PropertyName="Amp12d11" Header="12d амплитуда 11" />
                                         <telerikGrid:DataGridTextColumn PropertyName="Amp7d11" Header="7d амплитуда 11" />
                                         <telerikGrid:DataGridTextColumn PropertyName="Amp12d12" Header="12d амплитуда 12" />
-                                        <telerikGrid:DataGridTextColumn PropertyName="Amp7d12" Header="7d амплитуда 12" />
-
-
-
-
-                                    </telerikGrid:RadDataGrid.Columns>
+                                    <telerikGrid:DataGridTextColumn PropertyName="Amp7d12" Header="7d амплитуда 12" />
+                                </telerikGrid:RadDataGrid.Columns>
                                 </telerikGrid:RadDataGrid>
-                           
+                            <TextBlock Grid.Row="2" x:Name="text7d"/>
                         </Grid>
                     </PivotItem>
                 </Pivot >
