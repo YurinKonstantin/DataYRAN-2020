@@ -142,7 +142,13 @@ namespace DataYRAN
                                         //   await new MessageDialog(ex.ToString() + i.ToString() + "\t" + query.GetString(i) + "\t" + query.GetString(i).Replace(",", ".")).ShowAsync();
                                     }
                                 }
-                                int badint = query.GetInt32(55);
+                                int badint = 0;
+                                if (query.FieldCount>55)
+                                {
+                                    if(query.GetValue(55)!=null)
+                                    badint = query.GetInt32(55);
+                                }
+                                
                                 bool bad = false;
                                 if (badint == 1)
                                 {
