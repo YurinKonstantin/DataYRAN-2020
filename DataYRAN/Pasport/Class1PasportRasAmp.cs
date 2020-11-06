@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace DataYRAN.Pasport
 {
    public partial class BlankPagePasport
     {
       
-        public async Task<List<RasAmp>> AmpRas(List<ClassSob> classRazvertka1)
+        public List<RasAmp> AmpRas(List<ClassSob> classRazvertka1)
         {
             List<RasAmp> classRasAmp = new List<RasAmp>();
             foreach (ClassSob classSob in classRazvertka1)
@@ -123,7 +124,9 @@ namespace DataYRAN.Pasport
                         Windows.Storage.CachedFileManager.DeferUpdates(file);
                  
                         Windows.Storage.Streams.IRandomAccessStream randAccStream =  await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
-                        d.stringRich1.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
+                        RichEditBox richEditBox = new RichEditBox();
+                        richEditBox.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, d.stringRich);
+                        richEditBox.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
 
                         Windows.Storage.Provider.FileUpdateStatus status = await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
                         if (status != Windows.Storage.Provider.FileUpdateStatus.Complete)

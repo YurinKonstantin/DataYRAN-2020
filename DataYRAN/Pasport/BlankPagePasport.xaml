@@ -25,7 +25,9 @@
             <RowDefinition Height="auto"/>
             <RowDefinition/>
             <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+        
             <Grid x:Name="grid" Width="960" Height="640" Background="White" Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -33,7 +35,13 @@
                 </Grid.ColumnDefinitions>
                 <oxy:PlotView x:Name="oxi" Grid.Row="2"/>
              </Grid>
-            <StackPanel Orientation="Horizontal" Grid.Column="1">
+            <Grid Grid.Row="1" x:Name="gridtext" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Column="1">
             
        
         <AppBarButton x:Name="openFileButton" Icon="OpenFile"
@@ -53,12 +61,14 @@
             <AppBarSeparator/>
             <AppBarButton Icon="Print" Click="AppBarButton_Click_1"/>
         </StackPanel>
-
+             
         <RichEditBox Grid.Row="1" x:Name="editor" RelativePanel.Below="openFileButton" VerticalAlignment="Stretch" Background="White" VerticalContentAlignment="Stretch"
                  RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"/>
         <TextBox TextWrapping="Wrap" Grid.Row="2" Name="editor2" Visibility="Collapsed"/>
-            <TextBlock Text="sost" Grid.Row="2" Name="editor3" />
             
+            </Grid>
+            <TextBlock Text="sost" Grid.Row="2" Name="editor3" />
+            <Button Grid.Row="3" Content="Построить" Click="Button_Click"/>
         </Grid>
     </SplitView>
 </Page>

@@ -108,7 +108,7 @@ namespace DataYRAN
                             if (!query.GetString(2).Contains("Test"))
                             {
 
-
+                               
                                 List<ClassSobNeutron> cll = new List<ClassSobNeutron>();
                                 int[] masAmp = new int[12];
                                 for (int i = 7; i < 19; i++)
@@ -181,7 +181,7 @@ namespace DataYRAN
                                      }
                                     */
 
-                                }
+                                } 
                                 //  var cl = new BDWork.ClassTablSob()
                                 // {
                                 // Time = query.GetString(1),

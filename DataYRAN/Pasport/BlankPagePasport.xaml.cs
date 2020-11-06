@@ -53,7 +53,8 @@ namespace DataYRAN.Pasport
         {
             this.InitializeComponent(); 
         }
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        ObservableCollection<ClassSob> classSobs1 = new ObservableCollection<ClassSob>();
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
 
 
@@ -62,15 +63,16 @@ namespace DataYRAN.Pasport
 
                 try
                 {
-                    Debug.WriteLine("Clear");
+                    
                     classPasports.Clear();
-                    PasportBild(e.Parameter as ObservableCollection<ClassSob>);
+                    classSobs1 = e.Parameter as ObservableCollection<ClassSob>;
+                   // PasportBild(e.Parameter as ObservableCollection<ClassSob>);
 
                 }
                 catch (Exception ex)
                 {
                     MessageDialog messageDialog = new MessageDialog(ex.ToString());
-                    messageDialog.ShowAsync();
+                   // messageDialog.ShowAsync();
                 }
 
             }
@@ -95,11 +97,7 @@ namespace DataYRAN.Pasport
             mDney[9] = 31;
             mDney[10] = 30;
             mDney[11] = 31;
-        }
-      public  ObservableCollection<ClassPasport> classPasports = new ObservableCollection<ClassPasport>();
-        public async void PasportBild(ObservableCollection<ClassSob> classSobs)
-        {
-           colors[0] = Colors.Red;
+            colors[0] = Colors.Red;
             colors[1] = Colors.Green;
             colors[2] = Colors.Black;
             colors[3] = Colors.Blue;
@@ -111,25 +109,27 @@ namespace DataYRAN.Pasport
             colors[9] = Colors.DarkBlue;
             colors[10] = Colors.Gray;
             colors[11] = Colors.DarkGoldenrod;
+        }
+      public  ObservableCollection<ClassPasport> classPasports = new ObservableCollection<ClassPasport>();
+        public async void PasportBild(ObservableCollection<ClassSob> classSobs)
+        {
             List<string> mecdata = new List<string>();
             List<int> nameKl = new List<int>();
-            Debug.WriteLine("classSobs.Count "+ classSobs.Count.ToString());
+          
             if (classSobs.Count > 0)
             {
-                var nameK = from nn in classSobs orderby nn.nameklaster select Convert.ToInt32(nn.nameklaster);
+                var nameK = from nn in classSobs orderby nn.nameklaster select Convert.ToInt32(nn.nameklaster);//Определяем какие есть кластера
 
-                var orderedNumbers = from ClassSob in classSobs
-                                     orderby ClassSob.dateUR.DateTimeString()
-                                     select ClassSob;
+                var orderedNumbers = from ClassSob in classSobs orderby ClassSob.dateUR.DateTimeString() select ClassSob;//Сортируем события по дате
           
-                DateTime dateTime = new DateTime(orderedNumbers.ElementAt(0).dateUR.GG, orderedNumbers.ElementAt(0).dateUR.MM, orderedNumbers.ElementAt(0).dateUR.DD, 0, 0, 0, 0);
+                DateTime dateTime = new DateTime(orderedNumbers.ElementAt(0).dateUR.GG, orderedNumbers.ElementAt(0).dateUR.MM, orderedNumbers.ElementAt(0).dateUR.DD, 0, 0, 0, 0);//Самая первая дата в событиях
             
-                DateTime dateTimeFirst = new DateTime(orderedNumbers.ElementAt(0).dateUR.GG, orderedNumbers.ElementAt(0).dateUR.MM, orderedNumbers.ElementAt(0).dateUR.DD, 0, 0, 0, 0);
-            
+                DateTime dateTimeFirst = new DateTime(orderedNumbers.ElementAt(0).dateUR.GG, orderedNumbers.ElementAt(0).dateUR.MM, orderedNumbers.ElementAt(0).dateUR.DD, 0, 0, 0, 0);//Самая первая дата в событиях
+
                 DateTime dateTime1 = dateTime; //new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0, 0);
          
-                DateTime dateTimeEnd = new DateTime(orderedNumbers.ElementAt(orderedNumbers.Count() - 1).dateUR.GG, orderedNumbers.ElementAt(orderedNumbers.Count() - 1).dateUR.MM, orderedNumbers.ElementAt(orderedNumbers.Count() - 1).dateUR.DD, 0, 0, 0, 0);
-              
+                DateTime dateTimeEnd = new DateTime(orderedNumbers.ElementAt(orderedNumbers.Count() - 1).dateUR.GG, orderedNumbers.ElementAt(orderedNumbers.Count() - 1).dateUR.MM, orderedNumbers.ElementAt(orderedNumbers.Count() - 1).dateUR.DD, 0, 0, 0, 0);//Самая последняя дата в событиях
+
                 int max = nameK.Max();
                 int min = nameK.Min();
                 for (int i = min; i <= max; i++)
@@ -156,7 +156,7 @@ namespace DataYRAN.Pasport
                   
                         if (k.Count() > 0)
                         {
-                            mecdata.Add(k.First().dateUR.MM.ToString());
+                            mecdata.Add(k.First().dateUR.MM.ToString());//определяем какие есть месяца для паспорта
                         }
                     
                 }
@@ -165,7 +165,7 @@ namespace DataYRAN.Pasport
                 try
                 {
 
-                    foreach (int kl in nameKl)
+                    foreach (int kl in nameKl)//пройдемся по кластерам
                     {
                         foreach (string t in mecdata)
                         {
@@ -181,8 +181,8 @@ namespace DataYRAN.Pasport
                                
                                 await editor3.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => {
                                     editor3.Text = "Распределение амплитуд"; });
-                                classPasport.classRasAmp= await AmpRas(d.ToList());
-                                Debug.WriteLine("сигма пьедестала");
+                                classPasport.classRasAmp= AmpRas(d.ToList());
+                                
                                 await editor3.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => {
                                     editor3.Text = "сигма пьедестала"; });
 
@@ -220,122 +220,125 @@ namespace DataYRAN.Pasport
                                       
                                         if (storageFile != null)
                                         {
-                                            classPasport.stringRich1 = new RichEditBox();
+                                            RichEditBox  stringRich1 = new RichEditBox();
 
                                             using (Windows.Storage.Streams.IRandomAccessStream randAccStream = await storageFile.OpenAsync(Windows.Storage.FileAccessMode.Read))
                                             {
 
-
-                                               classPasport.stringRich1.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
-                                                
-                                              // await randAccStream.FlushAsync();
-                                              //  randAccStream.Dispose();
+                                              
+                                               stringRich1.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
+                                                stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out string s2);
+                                                classPasport.stringRich = s2;
+                                                // await randAccStream.FlushAsync();
+                                                //  randAccStream.Dispose();
                                             }
 
                                            string s = String.Empty;
-                                            classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
-                                            editor.Document.SetText(TextSetOptions.FormatRtf, s);
+                                            //classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
+                                           // editor.Document.SetText(TextSetOptions.FormatRtf, s);
 
                                             var hh = classPasport.Rabota(classPasport.classTemps);
                                             var g = from j in hh where j.colSob > 0 select j;
-                                            classPasport.stringRich1 = await Zamenatext("textH", g.Count().ToString(), classPasport.stringRich1);
-                                            classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
-                                            editor.Document.SetText(TextSetOptions.FormatRtf, s);
+                                            classPasport.stringRich = Zamenatext("textH", g.Count().ToString(), classPasport.stringRich);
+                                            //classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
+                                          //  editor.Document.SetText(TextSetOptions.FormatRtf, s);
 
                                             int pro = (int)((double)g.Count() /(double)(((double)mDney[d.First().dateUR.MM-1]*24) / 100.0));
-                                            classPasport.stringRich1 = await Zamenatext("textP", pro.ToString(), classPasport.stringRich1);
-                                            classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
-                                            editor.Document.SetText(TextSetOptions.FormatRtf, s);
+                                            classPasport.stringRich = Zamenatext("textP", pro.ToString(), classPasport.stringRich);
+                                           // classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
+                                           // editor.Document.SetText(TextSetOptions.FormatRtf, s);
 
                                             DateTime dateTime2 = new DateTime(d.First().dateUR.GG, d.First().dateUR.MM, d.First().dateUR.DD);
-                                            classPasport.stringRich1 = await Zamenatext("Заголовок", "Паспорт установки УРАН кластер №"+ kl.ToString()+
-                                              " за "+ dateTime2.Date.ToString("MMMM yyyy")+ " года.", classPasport.stringRich1);
-                                            classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
-                                            editor.Document.SetText(TextSetOptions.FormatRtf, s);
+                                            classPasport.stringRich = Zamenatext("Заголовок", "Паспорт установки УРАН кластер №"+ kl.ToString()+
+                                              " за "+ dateTime2.Date.ToString("MMMM yyyy")+ " года.", classPasport.stringRich);
+                                          //  classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
+                                           // editor.Document.SetText(TextSetOptions.FormatRtf, s);
                                       
                                             StorageFile storageFile1 = await creatPicRasAmp(classPasport.classRasAmp, g.Count());
-                                            classPasport.stringRich1 = await ZamenaPic("Pic1", classPasport.stringRich1, storageFile1);
+                                            classPasport.stringRich = await ZamenaPic("Pic1", classPasport.stringRich, storageFile1);
                                             classPasport.image = await GetPic(storageFile1);
-                                            classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
-                                            editor.Document.SetText(TextSetOptions.FormatRtf, s);
+                                          //  classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
+                                           // editor.Document.SetText(TextSetOptions.FormatRtf, s);
                                             
                                             string saa = "кластера №" + kl.ToString();
-                                            classPasport.stringRich1 = await Zamenatext("KL", saa, classPasport.stringRich1);
+                                            classPasport.stringRich =  Zamenatext("KL", saa, classPasport.stringRich);
                                             for (int i = 0; i < 12; i++)
                                             {
-                                                classPasport.stringRich1 = await Zamenatext("Tabsig"+(i+1).ToString(), classPasport.mas[i].ToString("0.00"), classPasport.stringRich1);
+                                                classPasport.stringRich =  Zamenatext("Tabsig"+(i+1).ToString(), classPasport.mas[i].ToString("0.00"), classPasport.stringRich);
                                             }
-                                            classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
-                                            editor.Document.SetText(TextSetOptions.FormatRtf, s);
+                                            //classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
+                                           // editor.Document.SetText(TextSetOptions.FormatRtf, s);
                                      
                                             for (int i = 0; i < 12; i++)
                                             {
-                                                classPasport.stringRich1 = await Zamenatext("Tabnull" + (i + 1).ToString(), classPasport.masSredNull[i].ToString("0000"), classPasport.stringRich1);
+                                                classPasport.stringRich =  Zamenatext("Tabnull" + (i + 1).ToString(), classPasport.masSredNull[i].ToString("0000"), classPasport.stringRich);
 
                                             }
-                                            classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
-                                            editor.Document.SetText(TextSetOptions.FormatRtf, s);
+                                            //classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
+                                           // editor.Document.SetText(TextSetOptions.FormatRtf, s);
                                           
                                             for (int i = 0; i < 12; i++)
                                             {
-                                                classPasport.stringRich1 = await Zamenatext("TabT" + (i + 1).ToString(), classPasport.masSredTemp[i].ToString("0.00"), classPasport.stringRich1);
+                                                classPasport.stringRich = Zamenatext("TabT" + (i + 1).ToString(), classPasport.masSredTemp[i].ToString("0.00"), classPasport.stringRich);
                                             }
-                                            classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
-                                            editor.Document.SetText(TextSetOptions.FormatRtf, s);
+                                           // classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
+                                           // editor.Document.SetText(TextSetOptions.FormatRtf, s);
                                            
                                             for (int i = 0; i < 12; i++)
                                             {
-                                                classPasport.stringRich1 = await Zamenatext("TabTN" + (i + 1).ToString(), classPasport.masSredTempN[i].ToString("0.00"), classPasport.stringRich1);
+                                                classPasport.stringRich =  Zamenatext("TabTN" + (i + 1).ToString(), classPasport.masSredTempN[i].ToString("0.00"), classPasport.stringRich);
                                             }
 
-                                            classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
-                                            editor.Document.SetText(TextSetOptions.FormatRtf, s);
+                                           //// classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
+                                            //editor.Document.SetText(TextSetOptions.FormatRtf, s);
 
                                             StorageFile storageFile2 = await creatPicSig(await SigLine(d.ToList(), 6));
                                          
-                                            classPasport.stringRich1 = await ZamenaPic("P2ic", classPasport.stringRich1, storageFile2);
-                                            classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
-                                            editor.Document.SetText(TextSetOptions.FormatRtf, s);
+                                            classPasport.stringRich = await ZamenaPic("P2ic", classPasport.stringRich, storageFile2);
+                                            //classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
+                                            //editor.Document.SetText(TextSetOptions.FormatRtf, s);
 
-                                            Stopwatch watch = Stopwatch.StartNew();
-                                            watch.Reset();
-                                            watch.Start();
+                                           
                                             StorageFile storageFile3 = await creatPicNullLine(await NullLinevoid(d.ToList(), 6));
-                                            Debug.WriteLine("st"+watch.ElapsedMilliseconds.ToString());
-                                            classPasport.stringRich1 = await ZamenaPic("Pic3", classPasport.stringRich1, storageFile3);
-                                            classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
-                                            editor.Document.SetText(TextSetOptions.FormatRtf, s);
+                                          
+                                            classPasport.stringRich = await ZamenaPic("Pic3", classPasport.stringRich, storageFile3);
+                                          //  classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
+                                           // editor.Document.SetText(TextSetOptions.FormatRtf, s);
 
                                             StorageFile storageFile4 = await creatPicTempSob(await TempSob(d.ToList(), 24));
 
-                                            classPasport.stringRich1 = await ZamenaPic("Pic4", classPasport.stringRich1, storageFile4);
-                                            classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
-                                            editor.Document.SetText(TextSetOptions.FormatRtf, s);
+                                            classPasport.stringRich = await ZamenaPic("Pic4", classPasport.stringRich, storageFile4);
+                                           // classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
+                                            //editor.Document.SetText(TextSetOptions.FormatRtf, s);
 
                                             StorageFile storageFile5 = await creatPicTempSobN(await TempNeutron(d.ToList(), 24));
 
-                                            classPasport.stringRich1 = await ZamenaPic("Pic5", classPasport.stringRich1, storageFile5);
-                                            classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
-                                            editor.Document.SetText(TextSetOptions.FormatRtf, s);
+                                            classPasport.stringRich = await ZamenaPic("Pic5", classPasport.stringRich, storageFile5);
+                                           // classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
+                                            //editor.Document.SetText(TextSetOptions.FormatRtf, s);
 
-                                            classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
-                                            editor.Document.SetText(TextSetOptions.FormatRtf, s);
+                                           // classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out s);
                                             classPasports.Add(classPasport);
+                                           // editor.Document.SetText(TextSetOptions.FormatRtf, s);
+                                            
 
                                         }
+                                      
+
                                     }
                                 }
                             }
                         }
-                        grid.Visibility = Visibility.Collapsed;
+                        
                     }
+                    grid.Visibility = Visibility.Collapsed;
 
                 }
                 catch (Exception ex)
                 {
                     ContentDialog errorDialog = new ContentDialog()
                     {
-                        Title = "File open error",
+                        Title = ex.Message,
                         Content = ex.ToString(),
                         PrimaryButtonText = "Ok"
                     };
@@ -431,7 +434,7 @@ namespace DataYRAN.Pasport
             }
         }
 
-        private async void ItalicButton_Click(object sender, RoutedEventArgs e)
+        private void ItalicButton_Click(object sender, RoutedEventArgs e)
         {
             Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
             
@@ -532,10 +535,10 @@ namespace DataYRAN.Pasport
         {
             ListView listView = (ListView)sender;
             ClassPasport classPasport = (ClassPasport)listView.SelectedItem;
-            classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out string s);
-            editor.Document.SetText(TextSetOptions.FormatRtf, s);
+           // classPasport.stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out string s);
+            editor.Document.SetText(TextSetOptions.FormatRtf, classPasport.stringRich);
         }
-        public async void Zamenatext(string textNaZamenu1, string zamena )
+        public void Zamenatext(string textNaZamenu1, string zamena )
         {
           
             string textToFind = textNaZamenu1;
@@ -556,15 +559,18 @@ namespace DataYRAN.Pasport
 
             }
         }
-        public async Task<RichEditBox> Zamenatext(string textNaZamenu1, string zamena, RichEditBox richEditBox)
+        public  string Zamenatext(string textNaZamenu1, string zamena, string stringEditBox)
         {
 
             string textToFind = textNaZamenu1;
 
+           // stringRich1.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
+           // stringRich1.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out string s2);
+            RichEditBox richEditBox = new RichEditBox();
+            richEditBox.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, stringEditBox);
             if (textToFind != null)
             {
               
-
                 ITextRange searchRange = richEditBox.Document.GetRange(0, 0);
                 while (searchRange.FindText(textToFind, TextConstants.MaxUnitCount, FindOptions.Word) > 0)
                 {
@@ -576,18 +582,22 @@ namespace DataYRAN.Pasport
               
 
             }
-            return richEditBox;
+            string ss = String.Empty;
+            richEditBox.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out ss);
+            return ss;
         }
-        public async Task<RichEditBox> ZamenaPic(string textNaZamenu1, RichEditBox richEditBox, StorageFile file)
+        public async Task<string> ZamenaPic(string textNaZamenu1, string stringEditBox, StorageFile file)
         {
-
+            RichEditBox richEditBox = new RichEditBox();
+            richEditBox.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, stringEditBox);
             if (file != null)
             {
+              
                 using (IRandomAccessStream fileStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
 
                 {
                     string textToFind = textNaZamenu1;
-
+                    
                     if (textToFind != null)
                     {
                        
@@ -613,12 +623,14 @@ namespace DataYRAN.Pasport
                   
                 }
             }
-            return richEditBox;
+            string ss = String.Empty;
+            richEditBox.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out ss);
+            return ss;
 
 
         }
       
-        public async Task<BitmapImage> GetPic( StorageFile file)
+        public async Task<BitmapImage> GetPic(StorageFile file)
         {
             BitmapImage image = new BitmapImage();
             if (file != null)
@@ -632,7 +644,7 @@ namespace DataYRAN.Pasport
 
 
         }
-        private async void AppBarButton_Click_1(object sender, RoutedEventArgs e)
+        private void AppBarButton_Click_1(object sender, RoutedEventArgs e)
         {
            
           
@@ -767,7 +779,7 @@ namespace DataYRAN.Pasport
         public async Task<StorageFile> creatPicSig(List<ClassRasSig> SigM)
         {
            // radChart.Series.Clear();
-            int d = 1;
+          //  int d = 1;
             //if (SigM.Count() > 7)
             {
           //      d = SigM.Count() / 5;
@@ -842,7 +854,7 @@ namespace DataYRAN.Pasport
         public async Task<StorageFile> creatPicNullLine(List<NullLine> SigM)
         {
          //   radChart.Series.Clear();
-            int d = 1;
+          //  int d = 1;
            // if(SigM.Count()>7)
             {
             //    d = SigM.Count() / 5;
@@ -984,7 +996,7 @@ namespace DataYRAN.Pasport
         public async Task<StorageFile> creatPicTempSobN(List<ClassTemp> SigM)
         {
            // radChart.Series.Clear();
-            int d = 1;
+          //  int d = 1;
          //   if (SigM.Count() > 4)
             {
              //   d = SigM.Count() / 5;
@@ -1077,7 +1089,7 @@ namespace DataYRAN.Pasport
 
                             {
 
-                                double vv = 0;
+                              //  double vv = 0;
                                 if ((double)dq.MAmp[i] == 0)
                                 {
                                     //   vv = Math.Log10(0.000001); 
@@ -1118,12 +1130,12 @@ namespace DataYRAN.Pasport
             {
 
                 this.MyModel = new PlotModel {PlotAreaBorderColor=OxyColors.Transparent, LegendPlacement = LegendPlacement.Outside, TitleFontSize = 26, LegendFontSize = 22 };
-                var startDate = SigM.ElementAt(0).dateTime.AddDays(-1);
+                var startDate = SigM.ElementAt(0).dateTime;
              
-                var endDate = SigM.ElementAt(SigM.Count()-1).dateTime.AddDays(1);
+                var endDate = SigM.ElementAt(SigM.Count()-1).dateTime;
                 double mag = 1;
 
-                double minor = 4;
+              //  double minor = 4;
                 
                 if (SigM.Count() > 7)
                 {
@@ -1131,7 +1143,7 @@ namespace DataYRAN.Pasport
                 }
                 var minValue = DateTimeAxis.ToDouble(startDate);
                 var maxValue = DateTimeAxis.ToDouble(endDate);
-                MyModel.Axes.Add(new DateTimeAxis { Position = AxisPosition.Bottom, StringFormat = "dd.MM.yyyy", Minimum = minValue, Maximum = maxValue, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, AxislineStyle = LineStyle.Solid, Title="Дата", MajorStep = mag});
+                MyModel.Axes.Add(new DateTimeAxis { Position = AxisPosition.Bottom, MinorStep = 1, StringFormat = "dd.MM.yyyy", Minimum = minValue, Maximum = maxValue, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, AxislineStyle = LineStyle.Solid, Title="Дата", MajorStep = mag});
                 MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, Maximum=1.5, Minimum=0, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, Title = "Сигма", AxislineStyle = LineStyle.Solid, });
 
                 List<DataSig2> datas;
@@ -1166,24 +1178,25 @@ namespace DataYRAN.Pasport
                 }
 
             }
-            public MainViewModel(List<NullLine> SigM)
+            public MainViewModel(List<NullLine> NullM)
             {
 
                 this.MyModel = new PlotModel { LegendPlacement = LegendPlacement.Outside, PlotAreaBorderColor =OxyColors.Transparent, TitleFontSize = 26, LegendFontSize =26 };
-                var startDate = SigM.ElementAt(0).dateTime.AddDays(-1);
-
-                var endDate = SigM.ElementAt(SigM.Count() - 1).dateTime.AddDays(1);
+               // var startDate = SigM.ElementAt(0).dateTime.AddDays(-1);
+                var startDate = NullM.ElementAt(0).dateTime;
+                //var endDate = SigM.ElementAt(SigM.Count() - 1).dateTime.AddDays(1);
+                var endDate = NullM.ElementAt(NullM.Count() - 1).dateTime;
                 double mag = 1;
 
-                double minor = 4;
+               // double minor = 4;
 
-                if (SigM.Count() > 7)
+                if (NullM.Count() > 7)
                 {
                     mag = 6;
                 }
                 var minValue = DateTimeAxis.ToDouble(startDate);
                 var maxValue = DateTimeAxis.ToDouble(endDate);
-                MyModel.Axes.Add(new DateTimeAxis {Title="Дата", MajorStep=mag,  StringFormat = "dd.MM.yyyy", Position = AxisPosition.Bottom, Minimum = minValue, Maximum = maxValue, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, AxislineStyle = LineStyle.Solid, });
+                MyModel.Axes.Add(new DateTimeAxis {Title="Дата", MajorStep =mag, MinorStep=1,   StringFormat = "dd.MM.yyyy", Position = AxisPosition.Bottom, Minimum = minValue, Maximum = maxValue, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, AxislineStyle = LineStyle.Solid, });
                 MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis {Title="Пьедестал, код АЦП", Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, Maximum = 2055, Minimum = 2030, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, AxislineStyle = LineStyle.Solid, });
 
                 List<DataSig2> datas;
@@ -1192,7 +1205,7 @@ namespace DataYRAN.Pasport
                 {
                     ScatterSeries linearAxis = new ScatterSeries() { MarkerFill = OxyColor.FromRgb(CustomPalettes.Color1[i].Color.R, CustomPalettes.Color1[i].Color.G, CustomPalettes.Color1[i].Color.B), Title = "D" + (i + 1).ToString(), MarkerType = OxyPlot.MarkerType.Circle };
                     datas = new List<DataSig2>();
-                    foreach (var dq in SigM)
+                    foreach (var dq in NullM)
                     {
                         double v = (double)dq.mNullLine[i];
                         if((double)dq.mNullLine[i] >= 2055)
@@ -1222,24 +1235,24 @@ namespace DataYRAN.Pasport
                 }
 
             }
-            public MainViewModel(List<ClassTemp> SigM)
+            public MainViewModel(List<ClassTemp> SobM)
             {
 
                 this.MyModel = new PlotModel { LegendPlacement = LegendPlacement.Outside, PlotAreaBorderColor = OxyColors.Transparent, TitleFontSize = 26, LegendFontSize = 26 };
-                var startDate = SigM.ElementAt(0).dateTime.AddDays(-1);
+                var startDate = SobM.ElementAt(0).dateTime;
 
-                var endDate = SigM.ElementAt(SigM.Count() - 1).dateTime.AddDays(1);
+                var endDate = SobM.ElementAt(SobM.Count() - 1).dateTime;
                 double mag = 1;
 
-                double minor = 4;
+                //double minor = 4;
 
-                if (SigM.Count() > 7)
+                if (SobM.Count() > 7)
                 {
                     mag = 6;
                 }
                 var minValue = DateTimeAxis.ToDouble(startDate);
                 var maxValue = DateTimeAxis.ToDouble(endDate);
-                MyModel.Axes.Add(new DateTimeAxis {Title="Дата", MajorStep=mag, StringFormat = "dd.MM.yyyy", Position = AxisPosition.Bottom, Minimum = minValue, Maximum = maxValue, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, AxislineStyle = LineStyle.Solid});
+                MyModel.Axes.Add(new DateTimeAxis {Title="Дата", MajorStep=mag, MinorStep = 1, StringFormat = "dd.MM.yyyy", Position = AxisPosition.Bottom, Minimum = minValue, Maximum = maxValue, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, AxislineStyle = LineStyle.Solid});
                 MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis {Title= "Nch/Ns", Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, Maximum = 1, Minimum = 0, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, AxislineStyle = LineStyle.Solid, });
 
                 List<DataSig2> datas;
@@ -1248,7 +1261,7 @@ namespace DataYRAN.Pasport
                 {
                     ScatterSeries linearAxis = new ScatterSeries() { MarkerFill = OxyColor.FromRgb(CustomPalettes.Color1[i].Color.R, CustomPalettes.Color1[i].Color.G, CustomPalettes.Color1[i].Color.B), Title = "D" + (i + 1).ToString(), MarkerType = OxyPlot.MarkerType.Circle };
                     datas = new List<DataSig2>();
-                    foreach (var dq in SigM)
+                    foreach (var dq in SobM)
                     {
                         double v = (double)dq.mTemp[i];
                         if ((double)dq.mTemp[i] >= 10)
@@ -1282,12 +1295,12 @@ namespace DataYRAN.Pasport
             {
 
                 this.MyModel = new PlotModel {PlotAreaBorderColor=OxyColors.Transparent, LegendPlacement = LegendPlacement.Outside, TitleFontSize = 26, LegendFontSize = 26 };
-                var startDate = SigM.ElementAt(0).dateTime.AddDays(-1);
+                var startDate = SigM.ElementAt(0).dateTime;
 
-                var endDate = SigM.ElementAt(SigM.Count() - 1).dateTime.AddDays(1);
+                var endDate = SigM.ElementAt(SigM.Count() - 1).dateTime;
                 double mag = 1;
 
-                double minor = 4;
+              
 
                 if (SigM.Count() > 7)
                 {
@@ -1295,7 +1308,7 @@ namespace DataYRAN.Pasport
                 }
                 var minValue = DateTimeAxis.ToDouble(startDate);
                 var maxValue = DateTimeAxis.ToDouble(endDate);
-                MyModel.Axes.Add(new DateTimeAxis {Title="Дата", MajorStep=mag, StringFormat = "dd.MM.yyyy", Position = AxisPosition.Bottom, Minimum = minValue, Maximum = maxValue, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, AxislineStyle = LineStyle.Solid, });
+                MyModel.Axes.Add(new DateTimeAxis {Title="Дата", MajorStep=mag, MinorStep = 1, StringFormat = "dd.MM.yyyy", Position = AxisPosition.Bottom, Minimum = minValue, Maximum = maxValue, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, AxislineStyle = LineStyle.Solid, });
                 MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis {Title= "N(nd)/Ns", Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, Maximum = 1, Minimum = 0, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, AxislineStyle = LineStyle.Solid, });
 
                 List<DataSig2> datas;
@@ -1359,6 +1372,14 @@ namespace DataYRAN.Pasport
 
             }
             public PlotModel MyModel { get; set; }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            gridtext.Visibility = Visibility.Collapsed;
+            PasportBild(classSobs1);
+           
+            gridtext.Visibility = Visibility.Visible;
         }
     }
 

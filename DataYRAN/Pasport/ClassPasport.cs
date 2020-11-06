@@ -18,7 +18,7 @@ namespace DataYRAN.Pasport
     {
         public string name { get; set; }
         public string stringRich { get; set; }
-        public RichEditBox stringRich1 { get; set; }
+      //  public RichEditBox stringRich1 { get; set; }
        public List<ClassSob> classSobs = new List<ClassSob>();
        public List<RasAmp> classRasAmp = new List<RasAmp>();
         public List<ClassRasSig> classSig = new List<ClassRasSig>();
@@ -709,8 +709,9 @@ namespace DataYRAN.Pasport
                     if (textToFind != null)
                     {
 
-
-                        ITextRange searchRange = stringRich1.Document.GetRange(0, 0);
+                        RichEditBox richEditBox = new RichEditBox();
+                        richEditBox.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, stringRich);
+                        ITextRange searchRange = richEditBox.Document.GetRange(0, 0);
                         if (searchRange.FindText(textToFind, TextConstants.MaxUnitCount, FindOptions.Word) > 0)
                         {
 
@@ -722,7 +723,9 @@ namespace DataYRAN.Pasport
                             searchRange.InsertImage(100, 100, 0, VerticalCharacterAlignment.Baseline, "img", fileStream);
 
                         }
-
+                        string ss = String.Empty;
+                        richEditBox.TextDocument.GetText(Windows.UI.Text.TextGetOptions.FormatRtf, out ss);
+                        stringRich = ss;
 
 
 
