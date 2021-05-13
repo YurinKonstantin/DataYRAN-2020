@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:telerikGrid="using:Telerik.UI.Xaml.Controls.Grid"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls" xmlns:oxy="using:OxyPlot.Windows"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -31,7 +31,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <CommandBar Background="White">
-                        <AppBarButton Icon="Refresh" Label="Обновить" />
+                        <AppBarButton Icon="Refresh" Label="Обновить" Click="AppBarButton_Click_1"/>
                         <AppBarButton Icon="Filter" Label="фильтр" >
                             <AppBarButton.Flyout>
                                 <MenuFlyout>
@@ -139,6 +139,12 @@
                         </controls:DataGrid.Columns>
                     </controls:DataGrid>
                 </Grid>
+            </PivotItem>
+            <PivotItem Header="ChartTempSob">
+                <oxy:PlotView x:Name="oxiSob"/>
+            </PivotItem>
+            <PivotItem Header="ChartTempNeutron">
+                <oxy:PlotView x:Name="oxiN" />
             </PivotItem>
         </Pivot>
       

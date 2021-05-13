@@ -103,51 +103,6 @@ namespace DataYRAN.Pasport
 
         }
        
-        private async void AppBarButton(object sender, RoutedEventArgs e)
-        {
-
-            var folderPicker = new Windows.Storage.Pickers.FolderPicker();
-            folderPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop;
-            folderPicker.FileTypeFilter.Add("*");
-
-            Windows.Storage.StorageFolder folder = await folderPicker.PickSingleFolderAsync();
-            if (folder != null)
-            {
-
-
-                foreach (var d in classPasports)
-                {
-                    StorageFile file= await folder.CreateFileAsync(d.name+".rtf", Windows.Storage.CreationCollisionOption.ReplaceExisting);
-                    if (file != null)
-                    {
-                    
-                        Windows.Storage.CachedFileManager.DeferUpdates(file);
-                 
-                        Windows.Storage.Streams.IRandomAccessStream randAccStream =  await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
-                        RichEditBox richEditBox = new RichEditBox();
-                        richEditBox.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, d.stringRich);
-                        richEditBox.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
-
-                        Windows.Storage.Provider.FileUpdateStatus status = await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
-                        if (status != Windows.Storage.Provider.FileUpdateStatus.Complete)
-                        {
-                            Windows.UI.Popups.MessageDialog errorBox =
-                                new Windows.UI.Popups.MessageDialog("File " + file.Name + " couldn't be saved.");
-                            await errorBox.ShowAsync();
-                        }
-                    }
-
-                    d.save(folder);
-                }
-
-                                MessageDialog messageDialog = new MessageDialog("Статистика нулевых линий сохранена сохранен");
-                await messageDialog.ShowAsync();
-
-            }
-            else
-            {
-
-            }
-        }
+       
     }
 }

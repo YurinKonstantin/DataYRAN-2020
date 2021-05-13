@@ -24,7 +24,31 @@ namespace DataYRAN
         int sumClast;
         public int SumClast
         { get { return sumClast; } set { sumClast = value; } }
+        public DataTimeUR GetDataisNS(long time)
+        {
+            DataTimeUR dataTimeUR = new DataTimeUR();
+            Int64 result;
+            
+            Int64 div = Math.DivRem(time, Convert.ToInt64(3.6 * 1000000000000), out result);
+            dataTimeUR.HH = Convert.ToInt32(div);
 
+            div = Math.DivRem(result, Convert.ToInt64(60000000000), out result);
+            dataTimeUR.Min= Convert.ToInt32(div);
+
+            div = Math.DivRem(result, Convert.ToInt64(1000000000), out result);
+            dataTimeUR.CC = Convert.ToInt32(div);
+
+            div = Math.DivRem(result, Convert.ToInt64(1000000), out result);
+            dataTimeUR.Mil = Convert.ToInt32(div);
+
+            div = Math.DivRem(result, Convert.ToInt64(1000), out result);
+            dataTimeUR.ML = Convert.ToInt32(div);
+
+            dataTimeUR.NN = Convert.ToInt32(result);
+
+            return dataTimeUR;
+
+        }
 
         int sumClastUp;
         public int SumClastUp
@@ -154,13 +178,23 @@ namespace DataYRAN
         }
         public string GetID()
         {
-            
 
 
-                return dateUR.GG.ToString("0000") + "-" + dateUR.MM.ToString("00") + "-" + dateUR.DD.ToString("00")
+        
+            return dateUR.GG.ToString("0000") + "-" + dateUR.MM.ToString("00") + "-" + dateUR.DD.ToString("00")
                                          + "_ue_" + dateUR.HH.ToString("00") + ":" + dateUR.Min.ToString("00") + ":" + dateUR.CC.ToString("00")
                                          + "." + dateUR.Mil.ToString("000") + "." + dateUR.ML.ToString("000") + "." + dateUR.NN.ToString("000");
             
+        }
+        public string GetID(long d)
+        {
+
+
+            DataTimeUR dataTimeUR = GetDataisNS(d);
+            return dateUR.GG.ToString("0000") + "-" + dateUR.MM.ToString("00") + "-" + dateUR.DD.ToString("00")
+                                         + "_ue_" + dataTimeUR.HH.ToString("00") + ":" + dataTimeUR.Min.ToString("00") + ":" + dataTimeUR.CC.ToString("00")
+                                         + "." + dataTimeUR.Mil.ToString("000") + "." + dataTimeUR.ML.ToString("000") + "." + dataTimeUR.NN.ToString("000");
+
         }
         public int GetMask
         {

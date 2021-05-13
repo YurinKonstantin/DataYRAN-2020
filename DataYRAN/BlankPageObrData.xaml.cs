@@ -1250,22 +1250,26 @@ namespace DataYRAN
                      {
 
 
-                         IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(classSob.dateUR.GG.ToString("0000") + "-" + classSob.dateUR.MM.ToString("00") + "-" + classSob.dateUR.DD.ToString("00")
-                                         + "_events");
+                        
                          BsonArray sAr = new BsonArray();
                          BsonArray klAr = new BsonArray();
+                       long time = 0;
                          foreach (var df in classSob.col)
                          {
                              sAr.Add(df.dateUR.GG.ToString("0000") + "-" + df.dateUR.MM.ToString("00") + "-" + df.dateUR.DD.ToString("00") + "_" + df.nameklaster +"_"+
                                  df.dateUR.HH.ToString("00") + ":" + df.dateUR.Min.ToString("00") + ":" + df.dateUR.CC.ToString("00")
                                           + "." + df.dateUR.Mil.ToString("000") + "." + df.dateUR.ML.ToString("000") + "." + df.dateUR.NN.ToString("000"));
+                            time += df.dateUR.GetTimeNS;
                              klAr.Add(Convert.ToInt32(df.nameklaster));
                          }
-                         BsonDocument person1 = new BsonDocument
+                      
+                        IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(classSob.dateUR.GG.ToString("0000") + "-" + classSob.dateUR.MM.ToString("00") + "-" + classSob.dateUR.DD.ToString("00")
+                                       + "_events");
+                        BsonDocument person1 = new BsonDocument
                      {
-                         {"_id", classSob.GetID()},
+                         {"_id", classSob.GetID(time)},
                          {"mask", classSob.GetMask},
-                         {"eas_event_time_ns", classSob.dateUR.GetTimeNS},
+                         {"eas_event_time_ns", time/classSob.col.Count},
                          {"list_of_ids", sAr},
                          {"list_of_cluster_numbers", klAr},
                          {"multiplicity", classSob.col.Count}

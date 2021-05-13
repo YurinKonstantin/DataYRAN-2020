@@ -79,6 +79,65 @@ namespace DataYRAN.Pasport
             return classTemps;
 
         }
+        
+        public async Task<List<ClassTemp>> TempSobNoNormirovka(List<ClassSob> classRazvertka1, int cloc)
+        {
+            List<ClassTemp> classTemps = new List<ClassTemp>();
+            var orderedNumbers = from ClassSob in classRazvertka1
+                                 orderby ClassSob.dateUR.DateTimeString()
+                                 select ClassSob;
+            DateTime dateTime = new DateTime(orderedNumbers.ElementAt(0).dateUR.GG, orderedNumbers.ElementAt(0).dateUR.MM, orderedNumbers.ElementAt(0).dateUR.DD, orderedNumbers.ElementAt(0).dateUR.HH, 0, 0, 0);
+            DateTime dateTimeFirst = new DateTime(orderedNumbers.ElementAt(0).dateUR.GG, orderedNumbers.ElementAt(0).dateUR.MM, orderedNumbers.ElementAt(0).dateUR.DD, orderedNumbers.ElementAt(0).dateUR.HH, 0, 0, 0);
+
+            DateTime dateTime1 = dateTime; //new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0, 0);
+            DateTime dateTimeEnd = new DateTime(orderedNumbers.ElementAt(orderedNumbers.Count() - 1).dateUR.GG, orderedNumbers.ElementAt(orderedNumbers.Count() - 1).dateUR.MM, orderedNumbers.ElementAt(orderedNumbers.Count() - 1).dateUR.DD, orderedNumbers.ElementAt(orderedNumbers.Count() - 1).dateUR.HH, 0, 0, 0);
+
+            dateTime1 = dateTime1.AddHours(cloc);
+            int col = 0;
+            double[] mas = new double[12];
+
+            for (int i = 0; i <= dateTimeEnd.Subtract(dateTimeFirst).TotalHours; i += cloc)
+            {
+                int xx = 1;
+
+                foreach (ClassSob classSob in orderedNumbers)
+                {
+                    DateTime dateTimeTec = new DateTime(classSob.dateUR.GG, classSob.dateUR.MM, classSob.dateUR.DD, classSob.dateUR.HH, classSob.dateUR.Min, classSob.dateUR.CC, 0);
+
+                    if (dateTimeTec.Subtract(dateTime).TotalHours >= 0 && dateTimeTec.Subtract(dateTime).TotalHours < cloc)
+                    {
+                        for (int ii = 0; ii < 12; ii++)
+                        {
+                            if (classSob.mAmp[ii] >= 10)
+                            {
+                                mas[ii] = mas[ii] + 1;
+                            }
+
+                        }
+                        xx = (int)dateTimeTec.Subtract(dateTime).TotalHours + 1;
+                        col++;
+                    }
+                    if (dateTimeTec.Subtract(dateTime).TotalHours > cloc)
+                    {
+                        break;
+                    }
+                }
+               
+                classTemps.Add(new ClassTemp() { dateTime = dateTime, mTemp = mas, colSob = col });
+                //DataColecN.Add(new ClassTemp() { dateTime = dateTime, mTemp = masN });
+
+
+                col = 0;
+                mas = new double[12];
+
+                dateTime = dateTime1;
+                dateTime1 = dateTime1.AddHours(cloc);
+
+            }
+
+            return classTemps;
+
+        }
         public async Task<List<ClassTemp>> TempNeutron(List<ClassSob> classRazvertka1, int cloc)
         {
             List<ClassTemp> classTemps = new List<ClassTemp>();

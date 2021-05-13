@@ -18,7 +18,7 @@ namespace DataYRAN.Pasport
     {
         public string name { get; set; }
         public string stringRich { get; set; }
-      //  public RichEditBox stringRich1 { get; set; }
+      
        public List<ClassSob> classSobs = new List<ClassSob>();
        public List<RasAmp> classRasAmp = new List<RasAmp>();
         public List<ClassRasSig> classSig = new List<ClassRasSig>();
@@ -72,6 +72,7 @@ namespace DataYRAN.Pasport
 
         public double[] masSredNull = new double[12];
       public  List<ClassTemp> classTemps = new List<ClassTemp>();
+        public List<ClassTemp> classTempsNoNorm = new List<ClassTemp>();
         public List<ClassTemp> classTempSob6()
         {
             List<ClassTemp> classSig6 = new List<ClassTemp>();

@@ -150,9 +150,9 @@ namespace DataYRAN
                                 {
                      
                             int[,] dataTail1 = new int[12, 20000];
-                            Debug.WriteLine(ObrD.Buf00.Length.ToString());
+                           
                                     ParserBAAK12.ParseBinFileBAAK12.ParseBinFileBAAK200(ObrD.Buf00, 1, out int[,] data1, out time1);
-                            Debug.WriteLine(data1.Length.ToString()+"\n"+ time1);
+                            
                             try
                             {
                                 if(SaveFileDelegate!=null)
@@ -186,7 +186,7 @@ namespace DataYRAN
                                        () =>
                                        {
                                            var mess = new MessageDialog("dssadasa" + "\n" + ex1.Message.ToString() + "\n" + ex1.ToString());
-                                           mess.ShowAsync();// КолПакетовОчер++;
+                                           _ = mess.ShowAsync();// КолПакетовОчер++;
                                         });
                                 }
                                     Debug.WriteLine(ObrD.tipName);
@@ -198,7 +198,7 @@ namespace DataYRAN
                                         () =>
                                         {
                                             var mess = new MessageDialog("dss" + "\n" + ex.Message.ToString() + "\n" + ex.ToString());
-                                            mess.ShowAsync();// КолПакетовОчер++;
+                                            _ = mess.ShowAsync();// КолПакетовОчер++;
                                         });
                                     }
 
@@ -246,7 +246,7 @@ namespace DataYRAN
                 {
 
                  cll = await ObrabotcaURAN.Obrabotca.neutron(dataTail1, Nul, bad, sig, (int)ClassUserSetUp.DlitN3, (int)ClassUserSetUp.PorogN);
-                //cll = await ObrabotcaURAN.Obrabotca.neutronTriy(dataTail1, Nul, bad, sig, (int)ClassUserSetUp.DlitN3, (int)ClassUserSetUp.PorogN);
+                //cll = await Obrabotca.neutronTriy(dataTail1, Nul, bad, sig, (int)ClassUserSetUp.DlitN3, (int)ClassUserSetUp.PorogN);
 
 
                 timeS = ParserBAAK12.ParseBinFileBAAK12.TimeS(data1, classUserSetUp.PorogS, Amp, Nul);

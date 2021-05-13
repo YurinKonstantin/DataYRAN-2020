@@ -1,4 +1,8 @@
-﻿using System;
+﻿using OxyPlot;
+using OxyPlot.Annotations;
+using OxyPlot.Axes;
+using OxyPlot.Series;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -16,6 +20,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using static DataYRAN.Pasport.BlankPagePasport;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -30,7 +35,8 @@ namespace DataYRAN
         {
             this.InitializeComponent();
         }
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        ObservableCollection<ClassSob> classRazvertka = new ObservableCollection<ClassSob>();
+        protected  override void OnNavigatedTo(NavigationEventArgs e)
         {
 
             
@@ -38,9 +44,9 @@ namespace DataYRAN
             {
                
 
-                ObservableCollection<ClassSob> classRazvertka = e.Parameter as ObservableCollection<ClassSob>;
+               classRazvertka = e.Parameter as ObservableCollection<ClassSob>;
 
-              await Temp(classRazvertka, 1);
+              
 
 
 
@@ -332,6 +338,239 @@ namespace DataYRAN
             {
 
             }
+        }
+
+        private async void AppBarButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            await Temp(classRazvertka, 1);
+            _MainViewModelSob = new MainViewModel(DataColec.ToList());
+            oxiSob.Model = _MainViewModelSob.MyModel;
+            MessageDialog messageDialog = new MessageDialog("Данные обработаны");
+            await messageDialog.ShowAsync();
+
+        }
+        public class CustomPalettes
+        {
+            static CustomPalettes()
+            {
+                CreateCustomDarkPalette();
+            }
+            static public SolidColorBrush[] Color1 = new SolidColorBrush[12];
+
+
+            private static void CreateCustomDarkPalette()
+            {
+                // ChartPalette palette = new ChartPalette() { Name = "CustomDark" };
+
+                // fill
+                // palette.FillEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 40, 152, 228)));//1
+                Color1[0] = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 40, 152, 228));
+                //  palette.FillEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 205, 0)));//2
+                Color1[1] = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 205, 0));
+                //  palette.FillEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 60, 0)));//3
+                Color1[2] = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 60, 0));
+                //  palette.FillEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 210, 202, 202)));//4
+                Color1[3] = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 210, 202, 202));
+                // palette.FillEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 67, 67, 67)));//5
+                Color1[4] = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 67, 67, 67));
+                //  palette.FillEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 31, 234, 149)));//6
+                Color1[5] = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 31, 234, 149));
+                // palette.FillEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 109, 49, 255)));//7
+                Color1[6] = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 109, 49, 255));
+                //  palette.FillEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 178, 161)));//8
+                Color1[7] = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 178, 161));
+                //  palette.FillEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 109, 255, 0)));//9
+                Color1[8] = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 109, 255, 0));
+                //  palette.FillEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 128, 0)));//10
+                Color1[9] = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 128, 0));
+                //  palette.FillEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 109, 0, 0)));//11
+                Color1[10] = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 109, 0, 0));
+                // palette.FillEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 205, 149, 117)));//12
+                Color1[11] = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 205, 149, 117));
+
+
+
+                // stroke
+                /*  palette.StrokeEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 0)));
+                  palette.StrokeEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 0)));
+                  palette.StrokeEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 0)));
+                  palette.StrokeEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 0)));
+                  palette.StrokeEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 0)));
+                  palette.StrokeEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 0)));
+                  palette.StrokeEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 0)));
+                  palette.StrokeEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 0)));
+                  palette.StrokeEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 0)));
+                  palette.StrokeEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 0)));
+                  palette.StrokeEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 0)));
+                  palette.StrokeEntries.Brushes.Add(new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 0)));
+                 */
+                // CustomDark = palette;
+            }
+
+            //public static ChartPalette CustomDark { get; private set; }
+
+        }
+        MainViewModel _MainViewModelSob;
+        MainViewModel _MainViewModelN;
+        public class Data
+        {
+            public double Category { get; set; }
+
+            public double Value { get; set; }
+        }
+        public class MainViewModel
+        {
+            public async void ss(object sender, EventArgs e)
+            {
+                MessageDialog messageDialog = new MessageDialog("Ok");
+                await messageDialog.ShowAsync();
+            }
+            public MainViewModel(List<ClassTemp> SobM)
+            {
+
+                this.MyModel = new PlotModel { LegendPlacement = LegendPlacement.Outside, PlotAreaBorderColor = OxyColors.Transparent, TitleFontSize = 26, LegendFontSize = 26 };
+                var startDate = SobM.ElementAt(0).dateTime;
+
+                var endDate = SobM.ElementAt(SobM.Count() - 1).dateTime;
+                double mag = 1;
+               
+
+                //double minor = 4;
+
+                if (SobM.Count() > 7)
+                {
+                    mag = 6;
+                }
+                var minValue = DateTimeAxis.ToDouble(startDate);
+                var maxValue = DateTimeAxis.ToDouble(endDate);
+                DateTimeAxis f= new DateTimeAxis { Title = "Дата", MajorStep = mag, MinorStep = 1, StringFormat = "dd.MM.yyyy", Position = AxisPosition.Bottom, Minimum = minValue, Maximum = maxValue, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, AxislineStyle = LineStyle.Solid };
+
+                LinearAxis d1=  new LinearAxis { Title = "Nch/Ns", Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, Minimum = 0, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, AxislineStyle = LineStyle.Solid, };
+                MyModel.Axes.Add(f);
+                MyModel.Axes.Add(d1);
+              
+
+
+                List<DataSig2> datas;
+
+                for (int i = 0; i < 12; i++)
+                {
+                    LineSeries linearAxis = new LineSeries() { MarkerFill = OxyColor.FromRgb(CustomPalettes.Color1[i].Color.R, CustomPalettes.Color1[i].Color.G, CustomPalettes.Color1[i].Color.B), Title = "D" + (i + 1).ToString(), MarkerType = OxyPlot.MarkerType.None }; ;
+                   // ScatterSeries linearAxis = new ScatterSeries() { MarkerFill = OxyColor.FromRgb(CustomPalettes.Color1[i].Color.R, CustomPalettes.Color1[i].Color.G, CustomPalettes.Color1[i].Color.B), Title = "D" + (i + 1).ToString(), MarkerType = OxyPlot.MarkerType.Circle };
+                    datas = new List<DataSig2>();
+                    foreach (var dq in SobM)
+                    {
+                        double v = (double)dq.mTemp[i];
+                        if ((double)dq.mTemp[i] >= 10)
+                        {
+                            v = 10;
+                        }
+                        if ((double)dq.mTemp[i] == 0)
+                        {
+                            v = 0.0;
+                        }
+                        if ((double)dq.mTemp[i] == 0 && dq.colSob == 0)
+                        {
+                            v = -1.0;
+                        }
+
+                        datas.Add(new DataSig2() { DateTime = dq.dateTime, Value = v });
+
+                    }
+                    foreach (var d in datas)
+                    {
+
+
+
+                        linearAxis.Points.Add(new DataPoint(DateTimeAxis.ToDouble(d.DateTime), d.Value));
+                    }
+                    this.MyModel.Series.Add(linearAxis);
+                }
+                d1.MouseUp += ss;
+               
+
+            }
+            public MainViewModel(List<ClassTemp> SigM, string g)
+            {
+
+                this.MyModel = new PlotModel { PlotAreaBorderColor = OxyColors.Transparent, LegendPlacement = LegendPlacement.Outside, TitleFontSize = 26, LegendFontSize = 26 };
+                var startDate = SigM.ElementAt(0).dateTime;
+
+                var endDate = SigM.ElementAt(SigM.Count() - 1).dateTime;
+                double mag = 1;
+
+
+
+                if (SigM.Count() > 7)
+                {
+                    mag = 6;
+                }
+                var minValue = DateTimeAxis.ToDouble(startDate);
+                var maxValue = DateTimeAxis.ToDouble(endDate);
+                MyModel.Axes.Add(new DateTimeAxis { Title = "Дата", MajorStep = mag, MinorStep = 1, StringFormat = "dd.MM.yyyy", Position = AxisPosition.Bottom, Minimum = minValue, Maximum = maxValue, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, AxislineStyle = LineStyle.Solid, });
+                MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Title = "N(nd)/Ns", Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, Minimum = 0, AxislineThickness = 2, FontSize = 26, TitleFontSize = 26, AxislineStyle = LineStyle.Solid, });
+
+                List<DataSig2> datas;
+
+                for (int i = 0; i < 12; i++)
+                {
+                    ScatterSeries linearAxis = new ScatterSeries() { MarkerFill = OxyColor.FromRgb(CustomPalettes.Color1[i].Color.R, CustomPalettes.Color1[i].Color.G, CustomPalettes.Color1[i].Color.B), Title = "D" + (i + 1).ToString(), MarkerType = OxyPlot.MarkerType.Circle };
+                    datas = new List<DataSig2>();
+                    foreach (var dq in SigM)
+                    {
+                        double v = (double)dq.mTemp[i];
+                        if ((double)dq.mTemp[i] >= 1.0)
+                        {
+                            v = 1.0;
+                        }
+                        if ((double)dq.mTemp[i] == 0)
+                        {
+                            v = 0.0;
+                        }
+                        if ((double)dq.mTemp[i] == 0 && dq.colSob == 0)
+                        {
+                            v = -1.0;
+                        }
+
+                        datas.Add(new DataSig2() { DateTime = dq.dateTime, Value = v });
+
+                    }
+                    foreach (var d in datas)
+                    {
+
+
+
+                        linearAxis.Points.Add(new ScatterPoint(DateTimeAxis.ToDouble(d.DateTime), d.Value));
+                    }
+                    this.MyModel.Series.Add(linearAxis);
+                }
+
+            }
+            public void CreatLogaritm()
+            {
+                MyModel.Axes.Add(new OxyPlot.Axes.LogarithmicAxis { Position = AxisPosition.Bottom, MaximumPadding = 0.1, Maximum = 10, MinimumPadding = 0.1, Title = "dsfs" });
+                MyModel.Axes.Add(new OxyPlot.Axes.LogarithmicAxis { Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, Title = "xcvxvx" });
+
+
+            }
+            public void AddLineSerias(string name, List<Data> datas)
+            {
+                OxyPlot.Series.LineSeries linearAxis = new OxyPlot.Series.LineSeries() { Title = name };
+                foreach (var d in datas)
+                {
+
+                    this.MyModel.Series.Add(linearAxis);
+                    linearAxis.Points.Add(new DataPoint(d.Category, d.Value));
+                }
+                this.MyModel.Series.Add(linearAxis);
+            }
+            public void CleaSerias()
+            {
+                this.MyModel.Series.Clear();
+
+
+            }
+            public PlotModel MyModel { get; set; }
         }
     }
 }
