@@ -83,6 +83,7 @@ namespace DataYRAN.LIfeTime
                 // Application now has read/write access to the picked file
                 this.nameFile.Text = "Имя файла: " + file.Name;
                 Debug.WriteLine(file.FileType);
+                string err = String.Empty;
                 char[] rowSplitter = { '\r', '\n' };
                 if (file.FileType != ".db")
                 {
@@ -114,35 +115,21 @@ namespace DataYRAN.LIfeTime
                 }
                 else
                 {
-                    
-                    SqliteConnection db =
-               new SqliteConnection("Data Source = " + file.Path);
-
-
-                    db.Open();
-
-                    SqliteCommand selectCommand = new SqliteCommand("SELECT * from Файлы", db);
-
-                    SqliteDataReader query = selectCommand.ExecuteReader();
-
-                    while (query.Read())
+                    try
                     {
-                        try
-                        {
 
-
-                            if (query.GetString(1).Split('_')[1] != "Test")
-                            {
-                                Debug.WriteLine(query.GetString(1));
-                                DataColecF.Add(new ClassFileLT() { nomer = Convert.ToInt32(query.GetString(0)), nameFile = query.GetString(1), TimeOpen = query.GetString(3), TimeClose = query.GetString(4), nameRun = query.GetString(5) });
-                            }
-                        }
-                        catch(Exception ex)
-                        {
-                            Debug.WriteLine(ex.ToString());                        }
-                        }
-
-                    db.Close();
+                        StorageFile storageFile = await file.CopyAsync(ApplicationData.Current.LocalFolder, file.Name, NameCollisionOption.ReplaceExisting);
+                        //SqliteConnection db = new SqliteConnection("Data Source = " + file.Path);
+                        openBDTime(file);
+                        string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, file.Name);
+                       // StorageFile storageFile = await StorageFile.GetFileFromPathAsync(dbpath);
+                       // await storageFile.DeleteAsync();
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageDialog messageDialog = new MessageDialog(ex.Message);
+                       await messageDialog.ShowAsync();
+                    }
                 }
               
 
@@ -152,7 +139,38 @@ namespace DataYRAN.LIfeTime
                 this.nameFile.Text = "Файл не выбран";
             }
         }
+        public async void openBDTime(StorageFile fole)
+        {
+            string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, fole.Name);
+            using (SqliteConnection db =new SqliteConnection($"Filename={dbpath}"))
+            {
+                db.Open();
 
+                SqliteCommand selectCommand = new SqliteCommand("SELECT * from Файлы", db);
+                SqliteDataReader query = selectCommand.ExecuteReader();
+                while (query.Read())
+                {
+                    try
+                    {
+
+
+                        if (query.GetString(1).Split('_')[1] != "Test")
+                        {
+                            Debug.WriteLine(query.GetString(1));
+                            DataColecF.Add(new ClassFileLT() { nomer = Convert.ToInt32(query.GetString(0)), nameFile = query.GetString(1), TimeOpen = query.GetString(3), TimeClose = query.GetString(4), nameRun = query.GetString(5) });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.ToString());
+                    }
+                }
+                
+
+            }
+           
+        
+        }
         private async void AppBarButton_Click_1(object sender, RoutedEventArgs e)
         {
             try

@@ -5,7 +5,6 @@
     xmlns:local="using:DataYRAN"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:telerikChart="using:Telerik.UI.Xaml.Controls.Chart"
     xmlns:lvc="using:LiveCharts.Uwp"
     mc:Ignorable="d"
@@ -174,35 +173,32 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </SplitView.Pane>
-            <controls:TabView UseLayoutRounding="True" ItemsSource="{x:Bind _ClassViewModalTab._DataColecViewDoc}" CanCloseTabs="True" IsCloseButtonOverlay="True">
-                <controls:TabView.ItemHeaderTemplate >
+            <Pivot UseLayoutRounding="True" ItemsSource="{x:Bind _ClassViewModalTab._DataColecViewDoc}" >
+                <Pivot.HeaderTemplate >
                     <DataTemplate  x:DataType="local:ClassTabs" >
                         <TextBlock Text="{x:Bind name}" FontSize="14"  VerticalAlignment="Center" Tag="{x:Bind tag}" ></TextBlock>
                     </DataTemplate>
-                </controls:TabView.ItemHeaderTemplate>
-                <controls:TabView.ItemTemplate>
-                    <DataTemplate x:DataType="local:ClassTabs">
-                        <controls:TabView ItemsSource="{x:Bind collectionPage}">
-                            <controls:TabView.ItemHeaderTemplate >
+                </Pivot.HeaderTemplate>
+                <Pivot.ItemTemplate>
+                
+                <DataTemplate x:DataType="local:ClassTabs">
+                        <Pivot ItemsSource="{x:Bind collectionPage}">
+                            <Pivot.HeaderTemplate >
                                 <DataTemplate  x:DataType="Grid" >
                                     <TextBlock Text="{x:Bind Tag}" FontSize="14"  VerticalAlignment="Center" ></TextBlock>
                                 </DataTemplate>
                                 
-                            </controls:TabView.ItemHeaderTemplate>
+                            </Pivot.HeaderTemplate>
                           
-                        </controls:TabView>
+                        </Pivot>
                     </DataTemplate>
-                </controls:TabView.ItemTemplate>
+                </Pivot.ItemTemplate>
 
-                <controls:TabView.TabActionHeader>
-                    <CommandBar DefaultLabelPosition="Collapsed">
-                        <AppBarButton Icon="Add" />
-                    </CommandBar>
-                </controls:TabView.TabActionHeader>
+             
 
 
 
-            </controls:TabView>
+            </Pivot>
         </SplitView>
         <CommandBar Grid.Row="3"  IsOpen="False" DefaultLabelPosition="Right">
             <AppBarButton Label="Добавить колонку" Icon="Add" Click="AppBarButton_Click_2"/>

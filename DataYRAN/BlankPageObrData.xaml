@@ -12,7 +12,7 @@
       xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
       xmlns:telerik="using:Telerik.UI.Xaml.Controls.DataVisualization"
       xmlns:telerik1="using:Telerik.UI.Xaml.Controls.Primitives"
-      xmlns:Windows10version1809="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 7)"
+      xmlns:Windows10version1809="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 7)" xmlns:controls1="using:Microsoft.UI.Xaml.Controls"
       mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
@@ -704,7 +704,7 @@
             <AppBarButton Icon="Delete" Label="Очистить список" VerticalAlignment="Stretch" Click="AppBarButton_Click_1" Foreground="Red" MaxWidth="58" MaxHeight="48"/>
             <AppBarButton Icon="Back" Label="Назад" VerticalAlignment="Stretch" Click="AppBarButton_Click_4" MaxWidth="58" MaxHeight="48"/>
             <AppBarButton Icon="Forward" Label="Вперед" VerticalAlignment="Stretch" Click="AppBarButton_Click_3" MaxWidth="58" MaxHeight="48"/>
-            <AppBarButton Icon="AllApps" Label="Выбрать все" VerticalAlignment="Stretch"  MaxWidth="58" MaxHeight="58"/>
+            <AppBarButton Icon="AllApps" Label="Выбрать все" VerticalAlignment="Stretch"  MaxWidth="58" MaxHeight="58" Click="SelectAll_Click" />
             <AppBarButton Icon="View" Label="Вид" VerticalAlignment="Stretch"  MaxWidth="58" MaxHeight="48">
                 <AppBarButton.Flyout>
                     <MenuFlyout  >
@@ -1866,8 +1866,8 @@
                         
                     </PivotItem>
                     <PivotItem Header="БААК12-200" FontSize="14" >
-                        <controls:TabView x:Name="SobitieN" >
-                            <controls:TabView.TabStartHeader>
+                        <Pivot x:Name="SobitieN" >
+                            <Pivot.LeftHeader>
 
 
 
@@ -1878,16 +1878,16 @@
                                     </Viewbox>
                                 </Button>
 
-                            </controls:TabView.TabStartHeader>
-                            <controls:TabView.TabEndHeader>
+                            </Pivot.LeftHeader>
+                            <Pivot.RightHeader>
                                 <CommandBar>
                                    
                                   
                                     <AppBarToggleButton Icon="View" Click="AppButton_Click_7"/>
                                 </CommandBar>
 
-                            </controls:TabView.TabEndHeader>
-                            <controls:TabViewItem Header="События"  UseLayoutRounding="True" FontSize="14">
+                            </Pivot.RightHeader>
+                            <PivotItem Header="События"  UseLayoutRounding="True" FontSize="14">
                                 <SplitView IsPaneOpen="False" DisplayMode="Inline"  OpenPaneLength="560" PanePlacement="Right" x:Name="Split2" UseLayoutRounding="True">
 
                                     <SplitView.Pane >
@@ -1939,7 +1939,7 @@
                                                             <TextBlock Grid.Column="0" FontSize="12"  VerticalAlignment="Center" Text="1"/>
                                                             <TextBlock Grid.Column="1"  VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Text="{Binding mAmp[0]}"/>
 
-                                                          
+
                                                             <TextBlock Grid.Column="3" FontSize="12"  VerticalAlignment="Center" Text="{Binding sig0}"/>
                                                             <TextBlock Grid.Column="4" FontSize="12"  VerticalAlignment="Center" Text="{Binding Nnull0}"/>
                                                             <TextBlock Grid.Column="5" FontSize="12"  VerticalAlignment="Center" Text="{Binding TimeS0}"/>
@@ -1957,7 +1957,7 @@
                                                                 <ColumnDefinition Width="90"/>
                                                             </Grid.ColumnDefinitions>
                                                             <TextBlock Grid.Column="0"  VerticalAlignment="Center" Text="2"/>
-                                                       
+
                                                             <TextBlock Grid.Column="2"  VerticalAlignment="Center" Text="{Binding Nnut1}"/>
                                                             <TextBlock Grid.Column="3"  VerticalAlignment="Center" Text="{Binding sig1}"/>
                                                             <TextBlock Grid.Column="4"  VerticalAlignment="Center" Text="{Binding Nnull1}"/>
@@ -2124,7 +2124,6 @@
                                                             <TextBlock Grid.Column="5" FontSize="12"  VerticalAlignment="Center" Text="{Binding TimeS11}"/>
 
                                                         </Grid>
-
                                                     </StackPanel>
                                                     <StackPanel x:Name="List55N" Visibility="Collapsed" DataContext="{Binding SelectedItem, ElementName=DataGridN}" Margin="0,24,0,0">
                                                         <Grid Padding="12" >
@@ -2254,11 +2253,7 @@
                                                             <TextBlock Grid.Column="4" Grid.Row="12" VerticalAlignment="Center" Text="{Binding TimeS11}"/>
                                                         </Grid>
                                                     </StackPanel>
-                                                  
-                                                  
-
                                                 </StackPanel>
-
                                                 <Grid Grid.Row="1">
                                                     <Pivot>
                                                         <PivotItem Header="Амплитуда">
@@ -2269,10 +2264,8 @@
                                                         </PivotItem>
                                                     </Pivot>
 
-                                              
+
                                                 </Grid>
-
-
                                             </Grid>
                                         </ScrollViewer>
                                     </SplitView.Pane>
@@ -2303,8 +2296,8 @@
                                        
                                     </Grid>
                                 </SplitView>
-                            </controls:TabViewItem>
-                            <controls:TabViewItem Header="Плохие" FontSize="14" >
+                            </PivotItem>
+                            <PivotItem Header="Плохие" FontSize="14" >
                                 <SplitView IsPaneOpen="False"
            DisplayMode="Inline"
            OpenPaneLength="560" PanePlacement="Right" x:Name="Split1PloxN">
@@ -2670,16 +2663,13 @@
                                         </telerikGrid:RadDataGrid>
                                     </Grid>
                                 </SplitView>
-                            </controls:TabViewItem>
+                            </PivotItem>
                      
-                        </controls:TabView>
+                        </Pivot>
                     </PivotItem>
                     <PivotItem Header="БААК12-100" FontSize="12" >
-                        <controls:TabView x:Name="SobitieV" >
-                            <controls:TabView.TabStartHeader>
-
-
-
+                        <Pivot x:Name="SobitieV" >
+                            <Pivot.LeftHeader>
                                 <Button Width="48" Click="Button_Click_7"   Margin="0,0,0,0" BorderThickness="1"
                 Background="Transparent"   Style="{StaticResource ButtonRevealStyle}" >
                                     <Viewbox MaxWidth="16" MaxHeight="16">
@@ -2687,8 +2677,9 @@
                                     </Viewbox>
                                 </Button>
 
-                            </controls:TabView.TabStartHeader>
-                            <controls:TabView.TabEndHeader>
+                            </Pivot.LeftHeader>
+                        
+                            <Pivot.RightHeader>
                                 <CommandBar>
                                     <AppBarButton Icon="Pictures" Label="визуализация" Click="AppBarButtonMap_Click"/>
                                     <AppBarToggleButton Icon="OutlineStar" Label="Статистика" Click="AppBarToggleButton_Click_6"/>
@@ -2698,8 +2689,8 @@
                                     <AppBarToggleButton Icon="View" Click="AppButton_Click_7"/>
                                 </CommandBar>
 
-                            </controls:TabView.TabEndHeader>
-                            <controls:TabViewItem Header="События"  UseLayoutRounding="True" FontSize="14">
+                            </Pivot.RightHeader>
+                            <PivotItem Header="События"  UseLayoutRounding="True" FontSize="14">
                                 <SplitView IsPaneOpen="False" DisplayMode="Inline"  OpenPaneLength="560" PanePlacement="Right" x:Name="Split1V" UseLayoutRounding="True">
 
                                     <SplitView.Pane >
@@ -3122,8 +3113,8 @@
                                         </telerikGrid:RadDataGrid>
                                     </Grid>
                                 </SplitView>
-                            </controls:TabViewItem>
-                            <controls:TabViewItem Header="Плохие" FontSize="14" >
+                            </PivotItem>
+                            <PivotItem Header="Плохие" FontSize="14" >
                                 <SplitView IsPaneOpen="False"
            DisplayMode="Inline"
            OpenPaneLength="560" PanePlacement="Right" x:Name="Split1PloxV">
@@ -3489,9 +3480,9 @@
                                         </telerikGrid:RadDataGrid>
                                     </Grid>
                                 </SplitView>
-                            </controls:TabViewItem>
+                            </PivotItem>
 
-                        </controls:TabView>
+                        </Pivot>
                     </PivotItem>
                     <PivotItem Header="БААК12-200Т+200" FontSize="12" >
                         <Grid>
@@ -3538,25 +3529,7 @@
                         </Grid>
                     </PivotItem>
                 </Pivot >
-                <controls:Expander Grid.Row="1" Visibility="Collapsed"  Header="Список доступных данных плат" Grid.Column="1" Foreground="White" Background="WhiteSmoke" IsExpanded="False" VerticalContentAlignment="Top"  Grid.RowSpan="3" ExpandDirection="Left" >
-                    <StackPanel>
-                        
-                   
-                   <ListView Header="Список доступных данных плат" SelectionChanged="ListViewVid_SelectionChanged" VerticalAlignment="Top" HorizontalAlignment="Left" x:Name="listViewVid" Width="280">
-                        <StackPanel>
-                            <TextBlock Text="БААК12-200Т"/>
-                        </StackPanel>
-                        
-                        <x:String>БААК12-200</x:String>
-                        <x:String>БААК12-100</x:String>
-                        <x:String>БААК12-200Т+БААК12-200</x:String>
-                        <x:String>БААК12-200Т общие</x:String>
-                        <x:String>Невод-ШАЛ</x:String>
-                        <x:String>УРАН+Невод-ШАЛ</x:String>
-                        
-                    </ListView>
-                    </StackPanel>
-                </controls:Expander>
+             
             </Grid>
 
         </SplitView>

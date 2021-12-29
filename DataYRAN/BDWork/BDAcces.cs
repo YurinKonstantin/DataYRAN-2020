@@ -91,7 +91,7 @@ namespace DataYRAN.BDWork
                            
                             masS[i - 43] = Convert.ToDouble(query.GetString(i));
                         }
-                        catch (Exception ex)
+                        catch(Exception ex)
                         {
                             Debug.Write("ReadError");
                             //   await new MessageDialog(ex.ToString() + i.ToString() + "\t" + query.GetString(i) + "\t" + query.GetString(i).Replace(",", ".")).ShowAsync();
@@ -263,7 +263,7 @@ namespace DataYRAN.BDWork
                         IFormatProvider formatter = new NumberFormatInfo { NumberDecimalSeparator = "." };
                         masS[i - 43] = Convert.ToDouble(query[i], formatter);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         //MessageBox.Show(ex.ToString() + i.ToString() + "\t" + query.GetString(i) + "\t" + query.GetString(i).Replace(",", "."));
                     }

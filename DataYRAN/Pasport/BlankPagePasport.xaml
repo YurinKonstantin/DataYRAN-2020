@@ -68,7 +68,11 @@
             
             </Grid>
             <TextBlock Text="sost" Grid.Row="2" Name="editor3" />
-            <Button Grid.Row="3" Content="Построить" Click="Button_Click"/>
+            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                <Button Grid.Row="3" Content="Построить" Click="Button_Click"/>
+                <ProgressRing x:Name="ring"/>
+            </StackPanel>
+            
         </Grid>
     </SplitView>
 </Page>

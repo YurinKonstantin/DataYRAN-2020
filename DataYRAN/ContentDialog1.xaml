@@ -5,7 +5,7 @@
     xmlns:local="using:DataYRAN"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls" xmlns:controls1="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     Title="TITLE"
     PrimaryButtonText="Применить"
@@ -21,9 +21,8 @@
         </Grid.RowDefinitions>
         <Pivot>
             <PivotItem Header="Маштаб">
-                <controls:TabView x:Name="ff">
-                   
-                    <controls:TabViewItem Header="Ось Х">
+                <Pivot x:Name="ff">
+                    <PivotItem Header="Ось Х">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="От" Margin="8"/>
@@ -37,8 +36,8 @@
                                 <TextBox Margin="8" x:Name="StepText" TextChanged="StepText_TextChanged" />
                             </StackPanel>
                         </StackPanel>
-                    </controls:TabViewItem>
-                    <controls:TabViewItem Header="Ось У">
+                    </PivotItem>
+                    <PivotItem Header="Ось У">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="От" Margin="8"/>
@@ -52,8 +51,8 @@
                                 <TextBox Margin="8" x:Name="StepTextY"  TextChanged="StepTextY_TextChanged"/>
                             </StackPanel>
                         </StackPanel>
-                    </controls:TabViewItem>
-                </controls:TabView>
+                    </PivotItem>
+                </Pivot>
             </PivotItem>
         </Pivot>
      

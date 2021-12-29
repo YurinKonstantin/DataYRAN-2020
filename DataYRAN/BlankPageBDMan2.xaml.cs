@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -39,6 +40,7 @@ namespace DataYRAN
             listsql1.Clear();
             listsql1.Add(textSql.Text);
             ClassBDMan2.listsql = listsql1;
+            ClassBDMan2.storageFile = storageFile;
             this.Frame.Navigate(typeof(BlankPageObrData), ClassBDMan2);
         }
    
@@ -82,9 +84,9 @@ namespace DataYRAN
         {
 
         }
-        string aql = "select * from [Событие] Where";
-        string aqlNull = "select * from [Событие] Where";
-        string aqlNull1 = "select * from [Событие]";
+        string aql = "select * from События Where";
+        string aqlNull = "select * from События Where";
+        string aqlNull1 = "select * from События";
         public void TimeYs()
         {
             if (ChTime.IsChecked == true)
@@ -171,13 +173,13 @@ namespace DataYRAN
             if(ChTime.IsChecked==false && ChklAll.IsChecked==true)
             {
                 aql = aqlNull1;
-                aql += " order by Код desc";
+                //aql += " order by Код desc";
             }
             else
             {
                 TimeYs();
                 TimeKl();
-                aql += "order by Код desc";
+                //aql += "order by Код desc";
             }
           
             textSql.Text = aql;
@@ -216,7 +218,7 @@ namespace DataYRAN
         {
 
         }
-
+        StorageFile storageFile;
         private async void Button_Click_4(object sender, RoutedEventArgs e)
         {
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
@@ -227,6 +229,7 @@ namespace DataYRAN
             picker.FileTypeFilter.Add(".db3");
 
             Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+            storageFile = file;
             if (file != null)
             {
                 Path.Text = file.Path;

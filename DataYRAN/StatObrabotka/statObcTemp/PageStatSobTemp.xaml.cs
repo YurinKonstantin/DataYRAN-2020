@@ -157,7 +157,7 @@ namespace DataYRAN.StatObrabotka.statObcTemp
                 {
                     using (StreamWriter writer =
                    new StreamWriter(await folder.OpenStreamForWriteAsync(
-                   "TempSob" + "." + "txt", CreationCollisionOption.GenerateUniqueName)))
+                   "TempSobObc" + "." + "txt", CreationCollisionOption.GenerateUniqueName)))
                     {
                         string sSob = "DateTime" + "\t" + "SobTemp";
 
@@ -175,7 +175,7 @@ namespace DataYRAN.StatObrabotka.statObcTemp
                 {
                     using (StreamWriter writer =
                    new StreamWriter(await folder.OpenStreamForWriteAsync(
-                   "TempSobN" + "." + "txt", CreationCollisionOption.GenerateUniqueName)))
+                   "TempSobNObc" + "." + "txt", CreationCollisionOption.GenerateUniqueName)))
                     {
                         string sSob = "DateTime" + "\t" + "STemp";
 

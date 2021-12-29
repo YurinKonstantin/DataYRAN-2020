@@ -93,16 +93,36 @@ namespace DataYRAN
                 //  await BDWork.BDAcces.GetDataSob(String.Empty, ViewModel.classSobs, BDWork.BDAcces.Path.ElementAt(0));
                 try
                 {
+                    
 
+                       StorageFile storageFile = await classBD.storageFile.CopyAsync(ApplicationData.Current.LocalFolder, classBD.storageFile.Name, NameCollisionOption.ReplaceExisting);
+                    string dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, classBD.storageFile.Name);
 
-                    using (SqliteConnection db = new SqliteConnection($"Filename={classBD.Path}"))
+                    using (SqliteConnection db = new SqliteConnection($"Filename={dbpath}"))
                     {
 
                         await db.OpenAsync();
 
                         SqliteCommand selectCommand = new SqliteCommand(classBD.listsql.ElementAt(0), db);
-                        SqliteDataReader query = selectCommand.ExecuteReader();
+                        
+                        int RowsCount =0;
+                        
 
+
+
+                           
+                        SqliteDataReader query2 = selectCommand.ExecuteReader();
+                        while (query2.Read())
+                        {
+                            RowsCount++;
+                        }
+                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,
+                    () =>
+                    {
+                        ViewModel.CountNaObrabSob = RowsCount;
+                    });
+                        selectCommand = new SqliteCommand(classBD.listsql.ElementAt(0), db);
+                        SqliteDataReader query = selectCommand.ExecuteReader();
                         while (query.Read())
                         {
                             if (!query.GetString(2).Contains("Test"))
@@ -157,29 +177,43 @@ namespace DataYRAN
 
                                 if (query.GetInt32(6) > 0)
                                 {
-                                    /* for (int i = 0; i < 12; i++)
-                                     {
-                                         if (masN[i] > 0)
-                                         {
-                                             for (int y = 0; y < masN[i]; y++)
-                                             {
+                                    try
+                                    {
 
 
-                                                 cll.Add(new ClassSobNeutron()
-                                                 {
-                                                     D = i + 1,
-                                                     Amp = 5,
-                                                     TimeAmp = 2,
-                                                     TimeEnd = 4,
-                                                     TimeEnd3 = 2,
-                                                     TimeFirst = 0,
-                                                     TimeFirst3 = 1
-                                                 });
-                                             }
-                                         }
+                                         Debug.WriteLine("Neutron");
+                                         SqliteCommand selectCommand1 = new SqliteCommand("select * from Нейтроны where (ИмяФайла = '" + query.GetString(2) + "' and Время = '" + query.GetString(1) + "')", db);
+                                         SqliteDataReader query1 = selectCommand1.ExecuteReader();
 
-                                     }
-                                    */
+                                         
+                                        while (query1.Read())
+                                        {
+                                            cll.Add(new ClassSobNeutron()
+                                            {
+                                                D = query1.GetInt32(3),
+                                                Amp = query1.GetInt32(4),
+                                                TimeAmp = query1.GetInt32(9),
+                                                TimeEnd = query1.GetInt32(6),
+                                                TimeEnd3 = query1.GetInt32(8),
+                                                TimeFirst = query1.GetInt32(5),
+                                                TimeFirst3 = query1.GetInt32(7)
+
+                                            });
+                                        }
+                                            
+                                       
+                                          
+                                        
+                                       
+
+                                        Debug.WriteLine("Neutron1");
+                                    }
+                                    catch(Exception ex)
+                                    {
+                                        Debug.WriteLine(ex.ToString());
+                                    }
+                                     
+                                    
 
                                 } 
                                 //  var cl = new BDWork.ClassTablSob()
@@ -213,57 +247,120 @@ namespace DataYRAN
                                 }
                                 Debug.WriteLine(query.GetString(2) + "\t" + query.GetString(4) + "\t" + dataTimeUR.TimeString());
                                 // string time1 = strTime[0] + "." + strTime[1] + "." + (Convert.ToInt32(strTime[2])).ToString("00") + "." + strTime[3] + "." + strTime[4] + "." + strTime[5] + "." + strTime[6];
-                                ViewModel.ClassSobsT.Add(new ClassSob()
+                                if (bad)
                                 {
-                                    nameFile = query.GetString(2),
-                                    nameklaster = query.GetString(4),
-                                    nameBAAK = query.GetString(3),
-                                    time = dataTimeUR.TimeString(),
-                                    mAmp = masAmp,
-                                    dateUR = dataTimeUR,
+                                    ViewModel._DataColecSobPloxT.Add(new ClassSob()
+                                    {
+                                        nameFile = query.GetString(2),
+                                        nameklaster = query.GetString(4),
+                                        nameBAAK = query.GetString(3),
+                                        time = dataTimeUR.TimeString(),
+                                        mAmp = masAmp,
+                                        dateUR = dataTimeUR,
 
-                                    //TimeS0 = timeS[0].ToString(),
-                                    // TimeS1 = timeS[1].ToString(),
-                                    // TimeS2 = timeS[2].ToString(),
-                                    // TimeS3 = timeS[3].ToString(),
-                                    // TimeS4 = timeS[4].ToString(),
-                                    // TimeS5 = timeS[5].ToString(),
-                                    // TimeS6 = timeS[6].ToString(),
-                                    // TimeS7 = timeS[7].ToString(),
-                                    //  TimeS8 = timeS[8].ToString(),
-                                    // TimeS9 = timeS[9].ToString(),
-                                    // TimeS10 = timeS[10].ToString(),
-                                    // TimeS11 = timeS[11].ToString(),
-                                    //  mTimeD = timeS,
-                                    sig0 = masS[0],
-                                    sig1 = masS[1],
-                                    sig2 = masS[2],
-                                    sig3 = masS[3],
-                                    sig4 = masS[4],
-                                    sig5 = masS[5],
-                                    sig6 = masS[6],
-                                    sig7 = masS[7],
-                                    sig8 = masS[8],
-                                    sig9 = masS[9],
-                                    sig10 = masS[10],
-                                    sig11 = masS[11],
+                                        //TimeS0 = timeS[0].ToString(),
+                                        // TimeS1 = timeS[1].ToString(),
+                                        // TimeS2 = timeS[2].ToString(),
+                                        // TimeS3 = timeS[3].ToString(),
+                                        // TimeS4 = timeS[4].ToString(),
+                                        // TimeS5 = timeS[5].ToString(),
+                                        // TimeS6 = timeS[6].ToString(),
+                                        // TimeS7 = timeS[7].ToString(),
+                                        //  TimeS8 = timeS[8].ToString(),
+                                        // TimeS9 = timeS[9].ToString(),
+                                        // TimeS10 = timeS[10].ToString(),
+                                        // TimeS11 = timeS[11].ToString(),
+                                        //  mTimeD = timeS,
+                                        sig0 = masS[0],
+                                        sig1 = masS[1],
+                                        sig2 = masS[2],
+                                        sig3 = masS[3],
+                                        sig4 = masS[4],
+                                        sig5 = masS[5],
+                                        sig6 = masS[6],
+                                        sig7 = masS[7],
+                                        sig8 = masS[8],
+                                        sig9 = masS[9],
+                                        sig10 = masS[10],
+                                        sig11 = masS[11],
 
-                                    Nnull0 = Convert.ToInt16(query.GetInt32(31)),
-                                    Nnull1 = Convert.ToInt16(query.GetInt32(32)),
-                                    Nnull2 = Convert.ToInt16(query.GetInt32(33)),
-                                    Nnull3 = Convert.ToInt16(query.GetInt32(34)),
-                                    Nnull4 = Convert.ToInt16(query.GetInt32(35)),
-                                    Nnull5 = Convert.ToInt16(query.GetInt32(36)),
-                                    Nnull6 = Convert.ToInt16(query.GetInt32(37)),
-                                    Nnull7 = Convert.ToInt16(query.GetInt32(38)),
-                                    Nnull8 = Convert.ToInt16(query.GetInt32(39)),
-                                    Nnull9 = Convert.ToInt16(query.GetInt32(40)),
-                                    Nnull10 = Convert.ToInt16(query.GetInt32(41)),
-                                    Nnull11 = Convert.ToInt16(query.GetInt32(42)),
-                                    classSobNeutronsList = cll
+                                        Nnull0 = Convert.ToInt16(query.GetInt32(31)),
+                                        Nnull1 = Convert.ToInt16(query.GetInt32(32)),
+                                        Nnull2 = Convert.ToInt16(query.GetInt32(33)),
+                                        Nnull3 = Convert.ToInt16(query.GetInt32(34)),
+                                        Nnull4 = Convert.ToInt16(query.GetInt32(35)),
+                                        Nnull5 = Convert.ToInt16(query.GetInt32(36)),
+                                        Nnull6 = Convert.ToInt16(query.GetInt32(37)),
+                                        Nnull7 = Convert.ToInt16(query.GetInt32(38)),
+                                        Nnull8 = Convert.ToInt16(query.GetInt32(39)),
+                                        Nnull9 = Convert.ToInt16(query.GetInt32(40)),
+                                        Nnull10 = Convert.ToInt16(query.GetInt32(41)),
+                                        Nnull11 = Convert.ToInt16(query.GetInt32(42)),
+                                        classSobNeutronsList = cll
 
-                                });
+                                    });
+                                }
+                                else
+                                {
 
+
+                                    ViewModel.ClassSobsT.Add(new ClassSob()
+                                    {
+                                        nameFile = query.GetString(2),
+                                        nameklaster = query.GetString(4),
+                                        nameBAAK = query.GetString(3),
+                                        time = dataTimeUR.TimeString(),
+                                        mAmp = masAmp,
+                                        dateUR = dataTimeUR,
+
+                                        //TimeS0 = timeS[0].ToString(),
+                                        // TimeS1 = timeS[1].ToString(),
+                                        // TimeS2 = timeS[2].ToString(),
+                                        // TimeS3 = timeS[3].ToString(),
+                                        // TimeS4 = timeS[4].ToString(),
+                                        // TimeS5 = timeS[5].ToString(),
+                                        // TimeS6 = timeS[6].ToString(),
+                                        // TimeS7 = timeS[7].ToString(),
+                                        //  TimeS8 = timeS[8].ToString(),
+                                        // TimeS9 = timeS[9].ToString(),
+                                        // TimeS10 = timeS[10].ToString(),
+                                        // TimeS11 = timeS[11].ToString(),
+                                        //  mTimeD = timeS,
+                                        sig0 = masS[0],
+                                        sig1 = masS[1],
+                                        sig2 = masS[2],
+                                        sig3 = masS[3],
+                                        sig4 = masS[4],
+                                        sig5 = masS[5],
+                                        sig6 = masS[6],
+                                        sig7 = masS[7],
+                                        sig8 = masS[8],
+                                        sig9 = masS[9],
+                                        sig10 = masS[10],
+                                        sig11 = masS[11],
+
+                                        Nnull0 = Convert.ToInt16(query.GetInt32(31)),
+                                        Nnull1 = Convert.ToInt16(query.GetInt32(32)),
+                                        Nnull2 = Convert.ToInt16(query.GetInt32(33)),
+                                        Nnull3 = Convert.ToInt16(query.GetInt32(34)),
+                                        Nnull4 = Convert.ToInt16(query.GetInt32(35)),
+                                        Nnull5 = Convert.ToInt16(query.GetInt32(36)),
+                                        Nnull6 = Convert.ToInt16(query.GetInt32(37)),
+                                        Nnull7 = Convert.ToInt16(query.GetInt32(38)),
+                                        Nnull8 = Convert.ToInt16(query.GetInt32(39)),
+                                        Nnull9 = Convert.ToInt16(query.GetInt32(40)),
+                                        Nnull10 = Convert.ToInt16(query.GetInt32(41)),
+                                        Nnull11 = Convert.ToInt16(query.GetInt32(42)),
+                                        classSobNeutronsList = cll
+
+                                    });
+                                }
+                                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,
+                  () =>
+                  {
+                      ViewModel.CountObrabSob++;
+                  });
+                                
                             }
 
                         }
@@ -2677,5 +2774,11 @@ textOb.Text = listC.Count().ToString();
                 this.Frame.Navigate(typeof(BlankPageBDMan2));
             
         }
+        private async void SelectAll_Click(object sender, RoutedEventArgs e)
+        {
+            listView1.SelectAll();
+
+        }
+       
     }
 }
